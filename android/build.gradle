@@ -1,0 +1,58 @@
+group 'com.banuba.sdk.flutter.banuba_sdk'
+version '1.0'
+
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.1.2'
+    }
+}
+
+rootProject.allprojects {
+    repositories {
+        google()
+        mavenCentral()
+
+        maven {
+            name "GitHubPackages"
+            url "https://maven.pkg.github.com/sdk-banuba/banuba-sdk-android"
+            credentials {
+                username = "sdk-banuba"
+                password = "\u0067\u0068\u0070\u005f\u0033\u0057\u006a\u0059\u004a\u0067\u0071\u0054\u0058\u0058\u0068\u0074\u0051\u0033\u0075\u0038\u0051\u0046\u0036\u005a\u0067\u004f\u0041\u0053\u0064\u0046\u0032\u0045\u0046\u006a\u0030\u0036\u006d\u006e\u004a\u004a"
+            }
+        }
+    }
+}
+
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 31
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        minSdkVersion 21
+    }
+}
+
+dependencies {
+    // Banuba SDK dependencies
+    implementation "com.banuba.sdk:banuba_sdk:1.9.1"
+
+    // Experimental - to significantly reduce the size
+    //implementation "com.banuba.sdk:sdk_core:1.9.1"
+    //implementation "com.banuba.sdk:effect_player:1.9.1"
+    //implementation "com.banuba.sdk:face_tracker:1.9.1"
+    //implementation "com.banuba.sdk:background:1.9.1"
+    //implementation "com.banuba.sdk:sdk_api:1.9.1"
+    //implementation "com.banuba.sdk:lips:1.9.1"
+    //implementation "com.banuba.sdk:skin:1.9.1"
+}
