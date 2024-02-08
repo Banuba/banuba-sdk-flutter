@@ -79,7 +79,7 @@ public class BanubaSdkPluginImpl: NSObject, BanubaSdkManager, VideoRecorderDeleg
     
     func unloadEffect() {
         Self.logger.debug("unloadEffect")
-        banubaSdkManager.loadEffect("")
+        banubaSdkManager.loadEffect("", synchronous: true)
     }
 
     func startPlayer() {
