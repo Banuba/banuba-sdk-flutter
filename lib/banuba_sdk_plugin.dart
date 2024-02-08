@@ -32,12 +32,16 @@ class BanubaSdkManager {
   /// parameter resourcePath: paths to cutom resources folders
   /// parameter clientTokenString: client token
   /// parameter logLevel: log level
-  Future<void> initialize(List<String?> arg_resourcePath, String arg_clientTokenString, SeverityLevel arg_logLevel) async {
+  Future<void> initialize(List<String?> arg_resourcePath,
+      String arg_clientTokenString, SeverityLevel arg_logLevel) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.initialize', codec,
         binaryMessenger: _binaryMessenger);
-    final List<Object?>? replyList =
-        await channel.send(<Object?>[arg_resourcePath, arg_clientTokenString, arg_logLevel.index]) as List<Object?>?;
+    final List<Object?>? replyList = await channel.send(<Object?>[
+      arg_resourcePath,
+      arg_clientTokenString,
+      arg_logLevel.index
+    ]) as List<Object?>?;
     if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
@@ -59,8 +63,7 @@ class BanubaSdkManager {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.deinitialize', codec,
         binaryMessenger: _binaryMessenger);
-    final List<Object?>? replyList =
-        await channel.send(null) as List<Object?>?;
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
     if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
@@ -105,8 +108,7 @@ class BanubaSdkManager {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.openCamera', codec,
         binaryMessenger: _binaryMessenger);
-    final List<Object?>? replyList =
-        await channel.send(null) as List<Object?>?;
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
     if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
@@ -128,8 +130,7 @@ class BanubaSdkManager {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.closeCamera', codec,
         binaryMessenger: _binaryMessenger);
-    final List<Object?>? replyList =
-        await channel.send(null) as List<Object?>?;
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
     if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
@@ -151,8 +152,7 @@ class BanubaSdkManager {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.startPlayer', codec,
         binaryMessenger: _binaryMessenger);
-    final List<Object?>? replyList =
-        await channel.send(null) as List<Object?>?;
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
     if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
@@ -174,8 +174,7 @@ class BanubaSdkManager {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.stopPlayer', codec,
         binaryMessenger: _binaryMessenger);
-    final List<Object?>? replyList =
-        await channel.send(null) as List<Object?>?;
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
     if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
@@ -197,8 +196,8 @@ class BanubaSdkManager {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.loadEffect', codec,
         binaryMessenger: _binaryMessenger);
-    final List<Object?>? replyList =
-        await channel.send(<Object?>[arg_path, arg_synchronously]) as List<Object?>?;
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_path, arg_synchronously]) as List<Object?>?;
     if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
@@ -220,8 +219,7 @@ class BanubaSdkManager {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.unloadEffect', codec,
         binaryMessenger: _binaryMessenger);
-    final List<Object?>? replyList =
-        await channel.send(null) as List<Object?>?;
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
     if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
@@ -287,7 +285,8 @@ class BanubaSdkManager {
   /// Enables flashlight. Available only for back camera facing.
   Future<void> enableFlashlight(bool arg_enabled) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.enableFlashlight', codec,
+        'dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.enableFlashlight',
+        codec,
         binaryMessenger: _binaryMessenger);
     final List<Object?>? replyList =
         await channel.send(<Object?>[arg_enabled]) as List<Object?>?;
@@ -308,12 +307,15 @@ class BanubaSdkManager {
   }
 
   /// Start video recording
-  Future<void> startVideoRecording(String arg_filePath, bool arg_captureAudio, int arg_width, int arg_height) async {
+  Future<void> startVideoRecording(String arg_filePath, bool arg_captureAudio,
+      int arg_width, int arg_height) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.startVideoRecording', codec,
+        'dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.startVideoRecording',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final List<Object?>? replyList =
-        await channel.send(<Object?>[arg_filePath, arg_captureAudio, arg_width, arg_height]) as List<Object?>?;
+    final List<Object?>? replyList = await channel.send(
+            <Object?>[arg_filePath, arg_captureAudio, arg_width, arg_height])
+        as List<Object?>?;
     if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
@@ -333,10 +335,10 @@ class BanubaSdkManager {
   /// Stops video recording
   Future<void> stopVideoRecording() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.stopVideoRecording', codec,
+        'dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.stopVideoRecording',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final List<Object?>? replyList =
-        await channel.send(null) as List<Object?>?;
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
     if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
@@ -354,12 +356,13 @@ class BanubaSdkManager {
   }
 
   /// Takes photo from camera
-  Future<void> takePhoto(String arg_filePath, int arg_width, int arg_height) async {
+  Future<void> takePhoto(
+      String arg_filePath, int arg_width, int arg_height) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.takePhoto', codec,
         binaryMessenger: _binaryMessenger);
-    final List<Object?>? replyList =
-        await channel.send(<Object?>[arg_filePath, arg_width, arg_height]) as List<Object?>?;
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_filePath, arg_width, arg_height]) as List<Object?>?;
     if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
@@ -400,12 +403,14 @@ class BanubaSdkManager {
   }
 
   /// Processes image with applied effect
-  Future<void> processImage(String arg_sourceFilePath, String arg_destFilePath) async {
+  Future<void> processImage(
+      String arg_sourceFilePath, String arg_destFilePath) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.processImage', codec,
         binaryMessenger: _binaryMessenger);
     final List<Object?>? replyList =
-        await channel.send(<Object?>[arg_sourceFilePath, arg_destFilePath]) as List<Object?>?;
+        await channel.send(<Object?>[arg_sourceFilePath, arg_destFilePath])
+            as List<Object?>?;
     if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
@@ -425,10 +430,11 @@ class BanubaSdkManager {
   /// Starts image editing mode
   Future<void> startEditingImage(String arg_sourceImageFilePath) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.startEditingImage', codec,
+        'dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.startEditingImage',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final List<Object?>? replyList =
-        await channel.send(<Object?>[arg_sourceImageFilePath]) as List<Object?>?;
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_sourceImageFilePath]) as List<Object?>?;
     if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
@@ -471,10 +477,10 @@ class BanubaSdkManager {
   /// Discard editing image mode
   Future<void> discardEditingImage() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.discardEditingImage', codec,
+        'dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.discardEditingImage',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final List<Object?>? replyList =
-        await channel.send(null) as List<Object?>?;
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
     if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',

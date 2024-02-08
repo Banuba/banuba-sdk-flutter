@@ -16,7 +16,8 @@ abstract class BanubaSdkManager {
   /// parameter resourcePath: paths to cutom resources folders
   /// parameter clientTokenString: client token
   /// parameter logLevel: log level
-  static void initialize(List<String> resourcePath, String clientTokenString, SeverityLevel logLevel) {}
+  static void initialize(List<String> resourcePath, String clientTokenString,
+      SeverityLevel logLevel) {}
 
   /// Releases common Banuba SDK resources.
   static void deinitialize() {}
@@ -52,7 +53,8 @@ abstract class BanubaSdkManager {
   void enableFlashlight(bool enabled);
 
   /// Start video recording
-  void startVideoRecording(String filePath, bool captureAudio, int width, int height);
+  void startVideoRecording(
+      String filePath, bool captureAudio, int width, int height);
 
   /// Stops video recording
   @async
