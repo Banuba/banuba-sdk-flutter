@@ -39,3 +39,6 @@
 
 ## 1.9.10
 * Remove permission android.permission.MANAGE_EXTERNAL_STORAGE on Android
+
+## 2.0.0
+* Make minimalistic sample
