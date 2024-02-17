@@ -42,3 +42,6 @@
 
 ## 2.0.0
 * Make minimalistic sample
+
+## 2.1.0
+* Support SDK version 1.11.0

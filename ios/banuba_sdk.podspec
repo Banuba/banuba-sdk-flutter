@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'banuba_sdk'
-  s.version          = '2.0.0'
+  s.version          = '2.1.0'
   s.summary          = 'Banuba SDK for Flutter'
   s.description      = <<-DESC
 Banuba SDK for Flutter
@@ -16,7 +16,7 @@ Banuba SDK for Flutter
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
   
-  version = '1.10.0'
+  version = '1.11.0'
   s.dependency 'BNBSdkCore', version
   s.dependency 'BNBSdkApi', version
   s.dependency 'BNBEffectPlayer', version
