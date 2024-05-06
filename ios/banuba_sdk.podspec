@@ -16,26 +16,8 @@ Banuba SDK for Flutter
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
   
-  version = '1.11.0'
-  s.dependency 'BNBSdkCore', version
-  s.dependency 'BNBSdkApi', version
-  s.dependency 'BNBEffectPlayer', version
-  s.dependency 'BNBFaceTracker', version
-  s.dependency 'BNBLips', version
-  s.dependency 'BNBSkin', version
-  s.dependency 'BNBBackground', version
-
-# Comment below dependencies to significantly reduce the size
-  s.dependency 'BNBScripting', version
-  s.dependency 'BNBFaceTrackerLite', version
-  s.dependency 'BNBHair', version
-  s.dependency 'BNBHands', version
-  s.dependency 'BNBWatch', version
-  s.dependency 'BNBOcclusion', version
-  s.dependency 'BNBEyes', version
-  s.dependency 'BNBBody', version
-  s.dependency 'BNBAcneEyebagsRemoval', version
-  s.dependency 'BNBNeurobeautyMakeup', version
+  version = '1.13.0'
+  s.dependency 'BanubaSdk', version
 
   s.resources = "bnb-resources"
   

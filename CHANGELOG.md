@@ -45,3 +45,6 @@
 
 ## 2.1.0
 * Support SDK version 1.11.0
+
+## 2.1.1
+* Set Banuba SDK versdion to 1.13.0
