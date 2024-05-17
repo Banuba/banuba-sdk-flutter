@@ -45,14 +45,5 @@ android {
 
 dependencies {
     // Banuba SDK dependencies
-    implementation "com.banuba.sdk:banuba_sdk:1.11.0"
-
-    // Experimental - to significantly reduce the size
-    //implementation "com.banuba.sdk:sdk_core:1.9.1"
-    //implementation "com.banuba.sdk:effect_player:1.9.1"
-    //implementation "com.banuba.sdk:face_tracker:1.9.1"
-    //implementation "com.banuba.sdk:background:1.9.1"
-    //implementation "com.banuba.sdk:sdk_api:1.9.1"
-    //implementation "com.banuba.sdk:lips:1.9.1"
-    //implementation "com.banuba.sdk:skin:1.9.1"
+    implementation "com.banuba.sdk:sdk_api:$project.bnb_sdk_version"
 }

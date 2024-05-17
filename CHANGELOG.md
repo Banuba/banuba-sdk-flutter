@@ -48,3 +48,6 @@
 
 ## 2.1.1
 * Set Banuba SDK versdion to 1.13.0
+
+## 3.0.0
+* Move Banuba SDK dependencies from plugin to app

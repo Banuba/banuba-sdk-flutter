@@ -2,9 +2,10 @@
 # To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html.
 # Run `pod lib lint banuba_sdk.podspec` to validate before publishing.
 #
+
 Pod::Spec.new do |s|
   s.name             = 'banuba_sdk'
-  s.version          = '2.1.0'
+  s.version          = '3.0.0'
   s.summary          = 'Banuba SDK for Flutter'
   s.description      = <<-DESC
 Banuba SDK for Flutter
@@ -16,8 +17,7 @@ Banuba SDK for Flutter
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
   
-  version = '1.13.0'
-  s.dependency 'BanubaSdk', version
+  s.dependency 'BNBSdkApi', $bnb_sdk_version
 
   s.resources = "bnb-resources"
   

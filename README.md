@@ -9,6 +9,8 @@ refer this [example app](https://github.com/Banuba/quickstart-flutter-plugin) on
 
 ## Links 
 
+[Documentation](https://docs.banuba.com/face-ar-sdk-v1)
+
 [Flutter AR Features](https://www.banuba.com/blog/flutter-ar-features-integration)
 
 [Face AR SDK](https://www.banuba.com/facear-sdk/face-filters)
