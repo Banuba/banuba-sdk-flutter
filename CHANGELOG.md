@@ -56,7 +56,7 @@
 * Minor fixes
 
 ## 3.0.2
-* Update build.gradle credentials 
+* Fix maven dependencies
 * Minor updates
 
 ## 3.0.3
