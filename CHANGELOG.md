@@ -51,3 +51,13 @@
 
 ## 3.0.0
 * Move Banuba SDK dependencies from plugin to app
+
+## 3.0.1
+* Minor fixes
+
+## 3.0.2
+* Fix maven dependencies
+* Minor updates
+
+## 3.0.3
+* Add namespace to Android
