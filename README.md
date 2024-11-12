@@ -21,7 +21,8 @@ The [Banuba Face AR Plugin](https://www.banuba.com/facear-sdk/face-filters) offe
 
 ### License
 
-Test all SDK features for free during a 14-day trial. [Contact us](https://www.banuba.com/support) to start your [Face AR trial](https://www.banuba.com/facear-sdk/face-filters#form).
+Test all SDK features for free during a 14-day trial. Send us a message to start the to start your [Face AR trial](https://www.banuba.com/facear-sdk/face-filters#form).
+Feel free to [contact us](https://www.banuba.com/support) if you have any questions regarding Banuba Flutter Plugin.
 
 ### Installation
 
@@ -33,7 +34,7 @@ flutter pub add banuba_sdk
 
 ### Integration guide
 
-Follow our Integration Guide for detailed integration steps.
+Follow our [Integration Guide](mdDocs/integration_guide.md) for detailed integration steps.
 
 ### Launch
 
