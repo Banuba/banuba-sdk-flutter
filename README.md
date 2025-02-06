@@ -2,7 +2,7 @@
 
 ## Overview
 
-The [Banuba Face AR Plugin](https://www.banuba.com/facear-sdk/face-filters) offers a comprehensive suite of augmented reality features for enhancing photos and live video feeds. Key features include:
+The [Banuba Face AR Plugin](https://docs.banuba.com/far-sdk/tutorials/development/basic_integration?platform=flutter) offers a comprehensive suite of augmented reality features for enhancing photos and live video feeds. Key features include:
 - Face and hand tracking
 - 3D face filters
 - Virtual try-on for various accessories
@@ -57,7 +57,7 @@ Follow our [Integration Guide](mdDocs/integration_guide.md) for detailed integra
 
 - [Minimal Sample](example/)
 - [Example App on GitHub](https://github.com/Banuba/quickstart-flutter-plugin)
-- [Documentation](https://docs.banuba.com/face-ar-sdk-v1)
+- [Documentation](https://docs.banuba.com)
 - [Flutter AR Features](https://www.banuba.com/blog/flutter-ar-features-integration)
 - [Face AR SDK](https://www.banuba.com/facear-sdk/face-filters)
 - [More about Banuba](https://www.banuba.com/)
