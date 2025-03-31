@@ -273,6 +273,12 @@ public class BanubaSdkPluginImpl {
         }
 
         @Override
+        public void reloadConfig(@NonNull String script) {
+            Log.d(TAG, "reloadConfig = " + script);
+            getSdkManager().getEffectPlayer().effectManager().reloadConfig(script);
+        }
+
+        @Override
         public void startVideoRecording(
                 String filePath,
                 Boolean captureAudio,

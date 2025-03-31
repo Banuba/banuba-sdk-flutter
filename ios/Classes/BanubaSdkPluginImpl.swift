@@ -100,7 +100,12 @@ public class BanubaSdkPluginImpl: NSObject, BanubaSdkManager, VideoRecorderDeleg
         Self.logger.debug("evalJs = \(script)")
         banubaSdkManager.effectManager()?.current()?.evalJs(script, resultCallback: nil)
     }
-    
+
+    func reloadConfig(script: String) {
+        Self.logger.debug("reloadConfig = \(script)")
+        banubaSdkManager.effectPlayer?.effectManager()?.reloadConfig(script)
+    }
+
     func startVideoRecording(
         filePath: String,
         captureAudio: Bool,
