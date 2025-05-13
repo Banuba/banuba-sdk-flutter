@@ -53,6 +53,15 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
+    }
+
+
+    ndkVersion = "25.1.8937393"
+
+    namespace "com.banuba.sdk.flutter.banuba_sdk_example"
 }
 
 dependencies {

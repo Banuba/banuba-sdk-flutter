@@ -99,7 +99,7 @@ Future<bool> requestPermissions() async {
 
 List<Permission> _getPlatformPermissions() {
   if (Platform.isAndroid) {
-    return [Permission.camera, Permission.microphone, Permission.storage];
+    return [Permission.camera, Permission.microphone/*, Permission.storage*/];
   } else if (Platform.isIOS) {
     return [Permission.camera, Permission.microphone];
   } else {
