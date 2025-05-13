@@ -1,20 +1,20 @@
 PODS:
   - banuba_sdk (3.0.0):
-    - BNBSdkApi (~> 1.13.0)
+    - BNBSdkApi (~> 1.17.1)
     - Flutter
-  - BNBBackground (1.13.0):
-    - BNBEffectPlayer (= 1.13.0)
-    - BNBScripting (= 1.13.0)
-    - BNBSdkCore (= 1.13.0)
-  - BNBEffectPlayer (1.13.0)
-  - BNBFaceTracker (1.13.0):
-    - BNBEffectPlayer (= 1.13.0)
-    - BNBScripting (= 1.13.0)
-    - BNBSdkCore (= 1.13.0)
-  - BNBScripting (1.13.0)
-  - BNBSdkApi (1.13.0):
-    - BNBSdkCore (= 1.13.0)
-  - BNBSdkCore (1.13.0)
+  - BNBBackground (1.17.1):
+    - BNBEffectPlayer (= 1.17.1)
+    - BNBScripting (= 1.17.1)
+    - BNBSdkCore (= 1.17.1)
+  - BNBEffectPlayer (1.17.1)
+  - BNBFaceTracker (1.17.1):
+    - BNBEffectPlayer (= 1.17.1)
+    - BNBScripting (= 1.17.1)
+    - BNBSdkCore (= 1.17.1)
+  - BNBScripting (1.17.1)
+  - BNBSdkApi (1.17.1):
+    - BNBSdkCore (= 1.17.1)
+  - BNBSdkCore (1.17.1)
   - Flutter (1.0.0)
   - fluttertoast (0.0.2):
     - Flutter
@@ -24,14 +24,14 @@ PODS:
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
-  - permission_handler_apple (9.1.1):
+  - permission_handler_apple (9.3.0):
     - Flutter
   - Toast (4.1.1)
 
 DEPENDENCIES:
   - banuba_sdk (from `.symlinks/plugins/banuba_sdk/ios`)
-  - BNBBackground (~> 1.13.0)
-  - BNBFaceTracker (~> 1.13.0)
+  - BNBBackground (~> 1.17.1)
+  - BNBFaceTracker (~> 1.17.1)
   - Flutter (from `Flutter`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
@@ -64,20 +64,20 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/permission_handler_apple/ios"
 
 SPEC CHECKSUMS:
-  banuba_sdk: f4e6e20d4d28eaf9dab18130ec18b36ea5b41928
-  BNBBackground: f2c3ccf8c7f131a4c6705312dde10f99df9aed20
-  BNBEffectPlayer: 4ca38373a5ef74333538b507e3ee02b2edea9672
-  BNBFaceTracker: 587e076fa32848c01bea1bbdb5c37cb2430644ad
-  BNBScripting: 837c71d7f8ffcab39956b428d3c634b2b6248107
-  BNBSdkApi: 2f69f7ad0fe07159168d4f0f8bc15f15bb576ef2
-  BNBSdkCore: 6356367d5aaeb49675420228b57c010747f96acf
+  banuba_sdk: f5bbf3a4cca7cd12f4bfbc2aaf8a2f61f7459468
+  BNBBackground: e6fb8e5a364bdba5157b0f150abd6eb938e2f7e6
+  BNBEffectPlayer: 3badeeeb5ea52177766962001d22a5d9b362f662
+  BNBFaceTracker: 0d432b3c4437ca17760e11231e269ca24ca0c5d1
+  BNBScripting: d5407811155575ba2998638573277f4553671f3c
+  BNBSdkApi: 259d366a1ec48c452115da1048efd342ff67f809
+  BNBSdkCore: a86f745456a97ac5507c2331ebf9472a9a2ec2d0
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  fluttertoast: 31b00dabfa7fb7bacd9e7dbee580d7a2ff4bf265
-  image_picker_ios: 4a8aadfbb6dc30ad5141a2ce3832af9214a705b5
-  path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
-  permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
+  fluttertoast: e9a18c7be5413da53898f660530c56f35edfba9c
+  image_picker_ios: c560581cceedb403a6ff17f2f816d7fea1421fc1
+  path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
+  permission_handler_apple: 9878588469a2b0d0fc1e048d9f43605f92e6cec2
   Toast: 1f5ea13423a1e6674c4abdac5be53587ae481c4e
 
-PODFILE CHECKSUM: fd26ef3ab26cfae2797295eca3ff3a7bb132089e
+PODFILE CHECKSUM: 6e6bf85ccf1f4b1bc5ddab3ab9394784c8c33e51
 
 COCOAPODS: 1.15.2

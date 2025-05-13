@@ -3,7 +3,7 @@ source 'https://github.com/sdk-banuba/banuba-sdk-podspecs.git'
 
 platform :ios, '14.0'
 
-$bnb_sdk_version = '~> 1.13.0'
+$bnb_sdk_version = '~> 1.17.1'
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
