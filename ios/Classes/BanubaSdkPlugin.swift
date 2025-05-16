@@ -70,6 +70,8 @@ protocol BanubaSdkManager {
   func unloadEffect() throws
   /// Used for passing specific expressions to interact with an effect.
   func evalJs(script: String) throws
+  /// Reload current effect config from the string provided.
+  func reloadConfig(script: String) throws
   /// Sets camera zoom level
   func setZoom(zoom: Double) throws
   /// Enables flashlight. Available only for back camera facing.
@@ -253,6 +255,24 @@ class BanubaSdkManagerSetup {
     } else {
       evalJsChannel.setMessageHandler(nil)
     }
+
+    /// Reload current effect config from the string provided.
+    let reloadConfigChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.reloadConfig", binaryMessenger: binaryMessenger)
+    if let api = api {
+      reloadConfigChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let scriptArg = args[0] as! String
+        do {
+          try api.reloadConfig(script: scriptArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      reloadConfigChannel.setMessageHandler(nil)
+    }
+
     /// Sets camera zoom level
     let setZoomChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.setZoom", binaryMessenger: binaryMessenger)
     if let api = api {
