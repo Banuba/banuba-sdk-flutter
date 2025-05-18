@@ -15,7 +15,7 @@
 
 ```groovy
     ext {
-        bnb_sdk_version = '1.16.+'
+        bnb_sdk_version = '1.17.+'
     }
 ```
 
@@ -25,7 +25,7 @@
 
 ```
     source 'https://github.com/sdk-banuba/banuba-sdk-podspecs.git'
-    $bnb_sdk_version = '~> 1.16.0'
+    $bnb_sdk_version = '~> 1.17.1'
 ```
 
 2. Add NSCameraUsageDescription in the [Info.plist](../example/ios/Runner/Info.plist):
@@ -125,6 +125,21 @@
 
 ```dart
     void evalJs(String script);
+```
+
+* Reload current effect config from the string provided:
+
+```dart
+    const script = """
+        {
+            "camera" : {},
+                "background" : {
+                // ...
+            }
+        }
+    """;
+
+    void reloadConfig(script);
 ```
 
 * Sets camera zoom level:

@@ -61,3 +61,6 @@
 
 ## 3.0.3
 * Add namespace to Android
+
+## 3.0.4
+* Add ```reloadConfig```(prefabs) method.
