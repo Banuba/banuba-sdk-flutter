@@ -109,6 +109,8 @@ public class BanubaSdkPluginGen {
     void unloadEffect();
     /** Used for passing specific expressions to interact with an effect. */
     void evalJs(@NonNull String script);
+    /** Reload current effect config from the string provided. */
+    void reloadConfig(@NonNull String script);
     /** Sets camera zoom level */
     void setZoom(@NonNull Double zoom);
     /** Enables flashlight. Available only for back camera facing. */
@@ -367,6 +369,30 @@ public class BanubaSdkPluginGen {
           channel.setMessageHandler(null);
         }
       }
+        {
+            BasicMessageChannel<Object> channel =
+                    new BasicMessageChannel<>(
+                            binaryMessenger, "dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.reloadConfig", getCodec());
+            if (api != null) {
+                channel.setMessageHandler(
+                        (message, reply) -> {
+                            ArrayList<Object> wrapped = new ArrayList<Object>();
+                            ArrayList<Object> args = (ArrayList<Object>) message;
+                            String scriptArg = (String) args.get(0);
+                            try {
+                                api.reloadConfig(scriptArg);
+                                wrapped.add(0, null);
+                            }
+                            catch (Throwable exception) {
+                                ArrayList<Object> wrappedError = wrapError(exception);
+                                wrapped = wrappedError;
+                            }
+                            reply.reply(wrapped);
+                        });
+            } else {
+                channel.setMessageHandler(null);
+            }
+        }
       {
         BasicMessageChannel<Object> channel =
             new BasicMessageChannel<>(
