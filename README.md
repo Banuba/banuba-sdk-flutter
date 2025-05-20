@@ -14,8 +14,8 @@ The [Banuba Face AR Plugin](https://docs.banuba.com/far-sdk/tutorials/developmen
 
 ## Requirements
 
-- **Android**: API level 23 (Android 6) or higher
-- **iOS**: Version 13.0 or higher
+- **Android**: API level 26 (Android 8) or higher
+- **iOS**: Version 14.0 or higher
 
 ## Usage
 
@@ -41,7 +41,7 @@ Follow our [Integration Guide](mdDocs/integration_guide.md) for detailed integra
 1. Set up your [Flutter development environment](https://docs.flutter.dev/get-started/editor).
 2. Clone the repository.
 3. Copy and Paste your Client Token into the appropriate section of [example/lib/main.dart](example/lib/main.dart#L31).
-4. Run `flutter pup get`  in the root directory to install dependencies.
+4. Run `flutter pub get`  in the root directory to install dependencies.
 
 #### IOS Specific
 
@@ -68,5 +68,5 @@ Follow our [Integration Guide](mdDocs/integration_guide.md) for detailed integra
 |:---------:|:-------:|
 |   Dart    |  3.3.0  |
 |  Flutter  | 3.19.2  |
-|  Android  |  6.0+   |
-|    iOS    |  13.0+  |
+|  Android  |  8.0+   |
+|    iOS    |  14.0+  |
