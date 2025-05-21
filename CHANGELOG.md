@@ -67,3 +67,6 @@
 
 ## 3.0.5
 * Camera mirroring fix for Android
+
+## 3.0.6
+* Fix project version
