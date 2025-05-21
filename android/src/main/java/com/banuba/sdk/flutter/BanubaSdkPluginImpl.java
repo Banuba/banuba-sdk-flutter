@@ -372,7 +372,7 @@ public class BanubaSdkPluginImpl {
         public void setCameraFacing(Boolean front) {
             Log.d(TAG, "setCameraFacing front = " + front);
             if (front) {
-                getSdkManager().setCameraFacing(Facing.FRONT);
+                getSdkManager().setCameraFacing(Facing.FRONT, true);
             } else {
                 getSdkManager().setCameraFacing(Facing.BACK, false);
             }

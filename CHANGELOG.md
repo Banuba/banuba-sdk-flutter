@@ -64,3 +64,6 @@
 
 ## 3.0.4
 * Add ```reloadConfig```(prefabs) method.
+
+## 3.0.5
+* Camera mirroring fix for Android
