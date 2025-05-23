@@ -299,6 +299,7 @@ class BanubaSdkManager {
     }
   }
 
+  /// TODO document 
   Future<void> reloadConfig(String script) async {
     final String pigeonVar_channelName = 'dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.reloadConfig$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
@@ -368,7 +369,7 @@ class BanubaSdkManager {
   }
 
   /// Start video recording
-  Future<void> startVideoRecording(String filePath, bool captureAudio, int width, int height, [bool frontCameraMirror = false,]) async {
+  Future<void> startVideoRecording(String filePath, bool captureAudio, int width, int height, [bool frontCameraMirror = true,]) async {
     final String pigeonVar_channelName = 'dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.startVideoRecording$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,

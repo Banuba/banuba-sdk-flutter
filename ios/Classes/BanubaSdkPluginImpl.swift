@@ -110,17 +110,23 @@ public class BanubaSdkPluginImpl: NSObject, BanubaSdkManager, VideoRecorderDeleg
         filePath: String,
         captureAudio: Bool,
         width: Int64,
-        height: Int64
+        height: Int64,
+        frontCameraMirror: Bool
     ) {
-        Self.logger.debug("startVideoRecording = \(filePath); audio = \(captureAudio); w = \(width); h = \(height)")
+        Self.logger.debug("startVideoRecording = \(filePath); audio = \(captureAudio); w = \(width); h = \(height); mirror = \(frontCameraMirror)")
         let url = URL(fileURLWithPath: filePath)
         adjustPlayerSize(width: width, height: height)
         if captureAudio {
             banubaSdkManager.input.startAudioCapturing()
         }
         banubaSdkManager.output?.reset()
-        banubaSdkManager.output?.startRecordingWithURL(
-            url,
+        banubaSdkManager.output?.startRecordingWithURL(url,
+            configuration: OutputConfiguration(
+                applyWatermark: false,
+                adjustDeviceOrientation: false,
+                mirrorFrontCamera: frontCameraMirror
+            ),
+            progressTimeInterval: 0,
             delegate: self
         )
     }

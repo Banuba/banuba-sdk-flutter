@@ -141,6 +141,7 @@ protocol BanubaSdkManager {
   func unloadEffect() throws
   /// Used for passing specific expressions to interact with an effect.
   func evalJs(script: String) throws
+  /// TODO document 
   func reloadConfig(script: String) throws
   /// Sets camera zoom level
   func setZoom(zoom: Double) throws
@@ -326,6 +327,7 @@ class BanubaSdkManagerSetup {
     } else {
       evalJsChannel.setMessageHandler(nil)
     }
+    /// TODO document 
     let reloadConfigChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.reloadConfig\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       reloadConfigChannel.setMessageHandler { message, reply in

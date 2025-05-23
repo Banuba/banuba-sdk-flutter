@@ -157,7 +157,7 @@ public class BanubaSdkPluginGen {
     void unloadEffect();
     /** Used for passing specific expressions to interact with an effect. */
     void evalJs(@NonNull String script);
-
+    /** TODO document  */
     void reloadConfig(@NonNull String script);
     /** Sets camera zoom level */
     void setZoom(@NonNull Double zoom);

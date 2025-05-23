@@ -57,7 +57,7 @@ abstract class BanubaSdkManager {
 
   /// Start video recording
   void startVideoRecording(
-      String filePath, bool captureAudio, int width, int height, [bool frontCameraMirror = false]);
+      String filePath, bool captureAudio, int width, int height, [bool frontCameraMirror = true]);
 
   /// Stops video recording
   @async
