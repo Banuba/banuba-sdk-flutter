@@ -141,13 +141,15 @@ protocol BanubaSdkManager {
   func unloadEffect() throws
   /// Used for passing specific expressions to interact with an effect.
   func evalJs(script: String) throws
-  /// TODO document 
+  /// Used for passing specific expressions to interact with an effect. 
+  /// @see https://docs.banuba.com/far-sdk/effects/prefabs/overview
   func reloadConfig(script: String) throws
   /// Sets camera zoom level
   func setZoom(zoom: Double) throws
   /// Enables flashlight. Available only for back camera facing.
   func enableFlashlight(enabled: Bool) throws
   /// Start video recording
+  /// @param frontCameraMirror is optional, applies for iOS only. 
   func startVideoRecording(filePath: String, captureAudio: Bool, width: Int64, height: Int64, frontCameraMirror: Bool) throws
   /// Stops video recording
   func stopVideoRecording(completion: @escaping (Result<Void, Error>) -> Void)
@@ -327,7 +329,8 @@ class BanubaSdkManagerSetup {
     } else {
       evalJsChannel.setMessageHandler(nil)
     }
-    /// TODO document 
+    /// Used for passing specific expressions to interact with an effect. 
+    /// @see https://docs.banuba.com/far-sdk/effects/prefabs/overview
     let reloadConfigChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.reloadConfig\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       reloadConfigChannel.setMessageHandler { message, reply in
@@ -376,6 +379,7 @@ class BanubaSdkManagerSetup {
       enableFlashlightChannel.setMessageHandler(nil)
     }
     /// Start video recording
+    /// @param frontCameraMirror is optional, applies for iOS only. 
     let startVideoRecordingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.startVideoRecording\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       startVideoRecordingChannel.setMessageHandler { message, reply in

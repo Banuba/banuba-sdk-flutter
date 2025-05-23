@@ -299,7 +299,8 @@ class BanubaSdkManager {
     }
   }
 
-  /// TODO document 
+  /// Used for passing specific expressions to interact with an effect. 
+  /// @see https://docs.banuba.com/far-sdk/effects/prefabs/overview
   Future<void> reloadConfig(String script) async {
     final String pigeonVar_channelName = 'dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.reloadConfig$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
@@ -369,6 +370,7 @@ class BanubaSdkManager {
   }
 
   /// Start video recording
+  /// @param frontCameraMirror is optional, applies for iOS only. 
   Future<void> startVideoRecording(String filePath, bool captureAudio, int width, int height, [bool frontCameraMirror = true,]) async {
     final String pigeonVar_channelName = 'dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.startVideoRecording$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(

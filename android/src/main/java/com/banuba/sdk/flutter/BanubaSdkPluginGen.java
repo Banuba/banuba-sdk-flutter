@@ -157,13 +157,19 @@ public class BanubaSdkPluginGen {
     void unloadEffect();
     /** Used for passing specific expressions to interact with an effect. */
     void evalJs(@NonNull String script);
-    /** TODO document  */
+    /**
+     * Used for passing specific expressions to interact with an effect. 
+     * @see https://docs.banuba.com/far-sdk/effects/prefabs/overview
+     */
     void reloadConfig(@NonNull String script);
     /** Sets camera zoom level */
     void setZoom(@NonNull Double zoom);
     /** Enables flashlight. Available only for back camera facing. */
     void enableFlashlight(@NonNull Boolean enabled);
-    /** Start video recording */
+    /**
+     * Start video recording
+     * @param frontCameraMirror is optional, applies for iOS only. 
+     */
     void startVideoRecording(@NonNull String filePath, @NonNull Boolean captureAudio, @NonNull Long width, @NonNull Long height, @NonNull Boolean frontCameraMirror);
     /** Stops video recording */
     void stopVideoRecording(@NonNull VoidResult result);
