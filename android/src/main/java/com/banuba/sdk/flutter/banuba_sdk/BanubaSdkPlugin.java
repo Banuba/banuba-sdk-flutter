@@ -25,12 +25,13 @@ public class BanubaSdkPlugin implements FlutterPlugin, ActivityAware {
             "effect_player_view", new NativeViewFactory()
         );
         mManagerImpl = new BanubaSdkManagerIml(flutterPluginBinding.getApplicationContext());
-        BanubaSdkManager.setup(flutterPluginBinding.getBinaryMessenger(), mManagerImpl);
+        BanubaSdkManager.setUp(flutterPluginBinding.getBinaryMessenger(), mManagerImpl);
+
     }
 
     @Override
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
-        BanubaSdkManager.setup(binding.getBinaryMessenger(), null);
+        BanubaSdkManager.setUp(binding.getBinaryMessenger(), null);
     }
 
     @Override

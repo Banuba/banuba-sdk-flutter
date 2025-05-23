@@ -13,7 +13,6 @@ import android.util.Size;
 import android.view.SurfaceView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.banuba.sdk.camera.Facing;
 import com.banuba.sdk.effect_player.CameraOrientation;
@@ -37,7 +36,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.RunnableFuture;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
 
 public class BanubaSdkPluginImpl {
     private static final String TAG = "BanubaSdkPlugin";
@@ -50,12 +48,11 @@ public class BanubaSdkPluginImpl {
         };
 
         private final Context mContext;
-        private @Nullable Activity mActivity;
         private BanubaSdkManager mSdkManager;
 
-        private BanubaSdkPluginGen.Result<Void> mTakePhotoCallback;
-        private BanubaSdkPluginGen.Result<Void> mVideoRecordingCallback;
-        private BanubaSdkPluginGen.Result<Void> mEditedImageCallback;
+        private BanubaSdkPluginGen.VoidResult mTakePhotoCallback;
+        private BanubaSdkPluginGen.VoidResult mVideoRecordingCallback;
+        private BanubaSdkPluginGen.VoidResult mEditedImageCallback;
 
         private File mPhotoFile;
 
@@ -65,7 +62,7 @@ public class BanubaSdkPluginImpl {
 
         private final IEventCallback mCallback = new IEventCallback() {
             @Override
-            public void onCameraOpenError(Throwable throwable) {
+            public void onCameraOpenError(@NonNull Throwable throwable) {
                 Log.w(TAG, "onCameraOpenError", throwable);
             }
 
@@ -75,18 +72,18 @@ public class BanubaSdkPluginImpl {
             }
 
             @Override
-            public void onScreenshotReady(Bitmap bitmap) {
+            public void onScreenshotReady(@NonNull Bitmap bitmap) {
                 Log.d(TAG, "onScreenshotReady");
-                final BanubaSdkPluginGen.Result<Void> cleanup  = new BanubaSdkPluginGen.Result<Void>() {
+                final BanubaSdkPluginGen.VoidResult cleanup  = new BanubaSdkPluginGen.VoidResult() {
                     @Override
-                    public void success(Void result) {
+                    public void success() {
                         Log.d(TAG, "Clean up take photo input args");
                         mPhotoFile = null;
                         mTakePhotoCallback = null;
                     }
 
                     @Override
-                    public void error(Throwable error) {
+                    public void error(@NonNull Throwable error) {
 
                     }
                 };
@@ -94,23 +91,21 @@ public class BanubaSdkPluginImpl {
             }
 
             @Override
-            public void onHQPhotoReady(Bitmap bitmap) {
+            public void onHQPhotoReady(@NonNull Bitmap bitmap) {
                 Log.d(TAG, "onHQPhotoReady");
             }
 
             @Override
-            public void onVideoRecordingFinished(RecordedVideoInfo recordedVideoInfo) {
+            public void onVideoRecordingFinished(@NonNull RecordedVideoInfo recordedVideoInfo) {
                 Log.d(TAG, "onVideoRecordingFinished = " + recordedVideoInfo);
-                if (recordedVideoInfo != null && recordedVideoInfo.getFilePath() != null) {
-                    try {
-                        final File f = new File(recordedVideoInfo.getFilePath());
-                        Log.d(TAG, "onVideoRecordingFinished: recorded file exists = " + f.exists());
-                    } catch (Exception e) {
-                        Log.w(TAG, "onVideoRecordingFinished: unknown file state");
-                    }
+                try {
+                    final File f = new File(recordedVideoInfo.getFilePath());
+                    Log.d(TAG, "onVideoRecordingFinished: recorded file exists = " + f.exists());
+                } catch (Exception e) {
+                    Log.w(TAG, "onVideoRecordingFinished: unknown file state");
                 }
                 if (mVideoRecordingCallback != null) {
-                    mVideoRecordingCallback.success(null);
+                    mVideoRecordingCallback.success();
                     mVideoRecordingCallback = null;
                 }
             }
@@ -121,28 +116,28 @@ public class BanubaSdkPluginImpl {
             }
 
             @Override
-            public void onImageProcessed(Bitmap bitmap) {
+            public void onImageProcessed(@NonNull Bitmap bitmap) {
                 Log.d(TAG, "onImageProcessed");
             }
 
             @Override
-            public void onFrameRendered(Data data, int i, int i1) {
+            public void onFrameRendered(@NonNull Data data, int i, int i1) {
             }
 
             @Override
-            public void onEditedImageReady(Bitmap bitmap) {
+            public void onEditedImageReady(@NonNull Bitmap bitmap) {
                 Log.d(TAG, "onEditedImageReady");
                 try {
-                    final BanubaSdkPluginGen.Result<Void> cleanup  = new BanubaSdkPluginGen.Result<Void>() {
+                    final BanubaSdkPluginGen.VoidResult cleanup  = new BanubaSdkPluginGen.VoidResult() {
                         @Override
-                        public void success(Void result) {
+                        public void success() {
                             Log.d(TAG, "Clean up save edited image input args");
                             mEditedImageFile = null;
                             mEditedImageCallback = null;
                         }
 
                         @Override
-                        public void error(Throwable error) {
+                        public void error(@NonNull Throwable error) {
 
                         }
                     };
@@ -172,7 +167,6 @@ public class BanubaSdkPluginImpl {
         }
 
         public void setActivity(Activity activity) {
-            mActivity = activity;
         }
 
         @Override
@@ -252,7 +246,7 @@ public class BanubaSdkPluginImpl {
         }
 
         @Override
-        public void loadEffect(@NonNull String path, Boolean synchronously) {
+        public void loadEffect(@NonNull String path, @NonNull Boolean synchronously) {
             Log.d(TAG, "loadEffect = " + path + ", synchronously = " + synchronously);
             getSdkManager().loadEffect(path, synchronously);
         }
@@ -280,10 +274,11 @@ public class BanubaSdkPluginImpl {
 
         @Override
         public void startVideoRecording(
-                String filePath,
-                Boolean captureAudio,
-                Long width,
-                Long height
+            @NonNull String filePath,
+            @NonNull Boolean captureAudio,
+            @NonNull Long width,
+            @NonNull Long height,
+            @NonNull Boolean frontCameraMirror // ignored for Android
         ) {
             Log.d(TAG, "startVideoRecording = " + filePath + "; audio = " + captureAudio
                     + ", w = " + width + "; h = " + height);
@@ -296,7 +291,7 @@ public class BanubaSdkPluginImpl {
         }
 
         @Override
-        public void stopVideoRecording(BanubaSdkPluginGen.Result<Void> result) {
+        public void stopVideoRecording(@NonNull BanubaSdkPluginGen.VoidResult result) {
             Log.d(TAG, "stopVideoRecording");
             mVideoRecordingCallback = result;
             getSdkManager().stopVideoRecording();
@@ -304,10 +299,10 @@ public class BanubaSdkPluginImpl {
 
         @Override
         public void takePhoto(
-                String filePath,
-                Long width,
-                Long height,
-                BanubaSdkPluginGen.Result<Void> result
+            @NonNull String filePath,
+            @NonNull Long width,
+            @NonNull Long height,
+            @NonNull BanubaSdkPluginGen.VoidResult result
         ) {
             Log.d(TAG, "takePhoto = " + filePath + "; w = " + width + "; h = " + height);
             mTakePhotoCallback = result;
@@ -321,9 +316,9 @@ public class BanubaSdkPluginImpl {
                 final Bitmap bitmap,
                 final int quality,
                 final File file,
-                final BanubaSdkPluginGen.Result<Void> callback,
-                final BanubaSdkPluginGen.Result<Void> cleanup
-                ) {
+                final BanubaSdkPluginGen.VoidResult callback,
+                final BanubaSdkPluginGen.VoidResult cleanup
+        ) {
             if (file == null) {
                 throw new IllegalArgumentException("File cannot be null");
             }
@@ -347,7 +342,7 @@ public class BanubaSdkPluginImpl {
 
                     // Flutter handles thread dispatching
                     if (callback != null) {
-                        callback.success(null);
+                        callback.success();
                     }
                 } catch (Exception e) {
                     Log.w(TAG, "Cannot save image to  = " + file.getAbsolutePath(), e);
@@ -358,7 +353,7 @@ public class BanubaSdkPluginImpl {
                     }
                 } finally {
                     bitmap.recycle();
-                    cleanup.success(null);
+                    cleanup.success();
                 }
 
                 Log.d(TAG, "Time to save image: " + file.getAbsolutePath() + "; q = " + quality
@@ -380,9 +375,9 @@ public class BanubaSdkPluginImpl {
 
         @Override
         public void processImage(
-                String sourceFilePath,
-                String destFilePath,
-                BanubaSdkPluginGen.Result<Void> callback
+            @NonNull String sourceFilePath,
+            @NonNull String destFilePath,
+            @NonNull BanubaSdkPluginGen.VoidResult res
         ) {
             final File destFile = new File(destFilePath);
 
@@ -437,42 +432,46 @@ public class BanubaSdkPluginImpl {
             getSdkManager().runOnRenderThread(future);
             try {
                 final Bitmap processed = future.get(30, TimeUnit.SECONDS);
-                final BanubaSdkPluginGen.Result<Void> cleanup = new BanubaSdkPluginGen.Result<Void>() {
+                final BanubaSdkPluginGen.VoidResult cleanup = new BanubaSdkPluginGen.VoidResult() {
                     @Override
-                    public void success(Void result) {
+                    public void success() {
                         Log.d(TAG, "Clean up edited image input args");
                         mEditedImageFile = null;
                         mEditedImageCallback = null;
                     }
 
                     @Override
-                    public void error(Throwable error) {
+                    public void error(@NonNull Throwable error) {
 
                     }
                 };
 
-                saveImageAndNotify(processed, 100, destFile, callback, cleanup);
+                saveImageAndNotify(processed, 100, destFile, res, cleanup);
             } catch (Exception e) {
                 Log.w(TAG, "Cannot process image!", e);
-                if (callback != null) {
-                    callback.error(e);
-                }
+                res.error(e);
             }
         }
 
         @Override
-        public void startEditingImage(String sourceImageFilePath, BanubaSdkPluginGen.Result<Void> result) {
+        public void startEditingImage(
+            @NonNull String sourceImageFilePath,
+            @NonNull BanubaSdkPluginGen.VoidResult result
+        ) {
             Log.d(TAG, "startEditingImage = " + sourceImageFilePath);
 
             final Bitmap source = BitmapFactory.decodeFile(sourceImageFilePath);
             final FullImageData image = new FullImageData(source,
                     new FullImageData.Orientation(CameraOrientation.DEG_0));
             getSdkManager().startEditingImage(image);
-            result.success(null);
+            result.success();
         }
 
         @Override
-        public void endEditingImage(String destImageFilePath, BanubaSdkPluginGen.Result<Void> result) {
+        public void endEditingImage(
+            @NonNull String destImageFilePath,
+            @NonNull BanubaSdkPluginGen.VoidResult result
+        ) {
             Log.d(TAG, "endEditingImage = " + destImageFilePath);
             mEditedImageFile = new File(destImageFilePath);
             mEditedImageCallback = result;
@@ -486,7 +485,7 @@ public class BanubaSdkPluginImpl {
         }
 
         @Override
-        public void setZoom(Double zoom) {
+        public void setZoom(@NonNull Double zoom) {
             if (zoom == null) {
                 Log.w(TAG, "Zoom value cannot be null");
                 return;
@@ -497,7 +496,7 @@ public class BanubaSdkPluginImpl {
         }
 
         @Override
-        public void enableFlashlight(Boolean enabled) {
+        public void enableFlashlight(@NonNull Boolean enabled) {
             Log.d(TAG, "enableFlashlight = " + enabled);
             getSdkManager().setFlashlightEnabled(enabled);
         }

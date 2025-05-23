@@ -46,6 +46,9 @@ abstract class BanubaSdkManager {
   /// Used for passing specific expressions to interact with an effect.
   void evalJs(String script);
 
+  /// TODO document 
+  void reloadConfig(String script);
+
   /// Sets camera zoom level
   void setZoom(double zoom);
 
@@ -54,7 +57,7 @@ abstract class BanubaSdkManager {
 
   /// Start video recording
   void startVideoRecording(
-      String filePath, bool captureAudio, int width, int height);
+      String filePath, bool captureAudio, int width, int height, [bool frontCameraMirror = false]);
 
   /// Stops video recording
   @async
