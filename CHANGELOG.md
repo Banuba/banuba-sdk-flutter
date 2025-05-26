@@ -70,3 +70,6 @@
 
 ## 3.0.6
 * Fix project version
+
+## 3.0.7
+* Add video mirroring for iOS
