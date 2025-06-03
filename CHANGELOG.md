@@ -76,3 +76,6 @@
 
 ## 3.0.8
 * Add posibility to pause video recording
+
+## 3.0.9
+* SDK version update
