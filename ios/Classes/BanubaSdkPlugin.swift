@@ -153,6 +153,12 @@ protocol BanubaSdkManager {
   func startVideoRecording(filePath: String, captureAudio: Bool, width: Int64, height: Int64, frontCameraMirror: Bool) throws
   /// Stops video recording
   func stopVideoRecording(completion: @escaping (Result<Void, Error>) -> Void)
+  /// Pause screen recording.
+  /// @see resumeVideoRecoding, startVideoRecording
+  func pauseVideoRecording() throws
+  /// Resume screen recording after it was paused.
+  /// @see pauseVideoRecording, startVideoRecording 
+  func resumeVideoRecoding() throws
   /// Takes photo from camera
   func takePhoto(filePath: String, width: Int64, height: Int64, completion: @escaping (Result<Void, Error>) -> Void)
   /// Sets camera facing: front, back
@@ -414,6 +420,36 @@ class BanubaSdkManagerSetup {
       }
     } else {
       stopVideoRecordingChannel.setMessageHandler(nil)
+    }
+    /// Pause screen recording.
+    /// @see resumeVideoRecoding, startVideoRecording
+    let pauseVideoRecordingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.pauseVideoRecording\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      pauseVideoRecordingChannel.setMessageHandler { _, reply in
+        do {
+          try api.pauseVideoRecording()
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      pauseVideoRecordingChannel.setMessageHandler(nil)
+    }
+    /// Resume screen recording after it was paused.
+    /// @see pauseVideoRecording, startVideoRecording 
+    let resumeVideoRecodingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.resumeVideoRecoding\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      resumeVideoRecodingChannel.setMessageHandler { _, reply in
+        do {
+          try api.resumeVideoRecoding()
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      resumeVideoRecodingChannel.setMessageHandler(nil)
     }
     /// Takes photo from camera
     let takePhotoChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.takePhoto\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)

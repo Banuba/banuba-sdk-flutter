@@ -131,6 +131,16 @@ public class BanubaSdkPluginImpl: NSObject, BanubaSdkManager, VideoRecorderDeleg
         )
     }
     
+    func pauseVideoRecording() {
+        Self.logger.debug("pauseVideoRecording")
+        banubaSdkManager.output?.pauseRecording()
+    }
+    
+    func resumeVideoRecoding()  {
+        Self.logger.debug("resumeVideoRecoding")
+        banubaSdkManager.output?.resumeRecording()
+    }
+    
     func stopVideoRecording(completion: @escaping (Result<Void, Error>) -> Void) {
         Self.logger.debug("stopVideoRecording")
         recordingVideoCompletion = completion

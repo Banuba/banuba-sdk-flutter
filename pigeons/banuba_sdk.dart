@@ -65,6 +65,14 @@ abstract class BanubaSdkManager {
   @async
   void stopVideoRecording();
 
+  /// Pause screen recording.
+  /// @see resumeVideoRecoding, startVideoRecording
+  void pauseVideoRecording();
+
+  /// Resume screen recording after it was paused.
+  /// @see pauseVideoRecording, startVideoRecording 
+  void resumeVideoRecoding();
+
   /// Takes photo from camera
   @async
   void takePhoto(String filePath, int width, int height);

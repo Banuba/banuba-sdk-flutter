@@ -298,6 +298,18 @@ public class BanubaSdkPluginImpl {
         }
 
         @Override
+        public void pauseVideoRecording() {
+            Log.d(TAG, "pauseVideoRecording");
+            getSdkManager().pauseVideoRecording();
+        }
+
+        @Override
+        public void resumeVideoRecoding() {
+            Log.d(TAG, "resumeVideoRecoding");
+            getSdkManager().unpauseVideoRecording();
+        }
+
+        @Override
         public void takePhoto(
             @NonNull String filePath,
             @NonNull Long width,
