@@ -73,3 +73,6 @@
 
 ## 3.0.7
 * Add video mirroring for iOS
+
+## 3.0.8
+* Add posibility to pause video recording
