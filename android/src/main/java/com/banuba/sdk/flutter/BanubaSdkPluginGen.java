@@ -182,7 +182,7 @@ public class BanubaSdkPluginGen {
      * Resume screen recording after it was paused.
      * @see pauseVideoRecording, startVideoRecording 
      */
-    void resumeVideoRecoding();
+    void resumeVideoRecording();
     /** Takes photo from camera */
     void takePhoto(@NonNull String filePath, @NonNull Long width, @NonNull Long height, @NonNull VoidResult result);
     /** Sets camera facing: front, back */
@@ -574,13 +574,13 @@ public class BanubaSdkPluginGen {
       {
         BasicMessageChannel<Object> channel =
             new BasicMessageChannel<>(
-                binaryMessenger, "dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.resumeVideoRecoding" + messageChannelSuffix, getCodec());
+                binaryMessenger, "dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.resumeVideoRecording" + messageChannelSuffix, getCodec());
         if (api != null) {
           channel.setMessageHandler(
               (message, reply) -> {
                 ArrayList<Object> wrapped = new ArrayList<>();
                 try {
-                  api.resumeVideoRecoding();
+                  api.resumeVideoRecording();
                   wrapped.add(0, null);
                 }
  catch (Throwable exception) {

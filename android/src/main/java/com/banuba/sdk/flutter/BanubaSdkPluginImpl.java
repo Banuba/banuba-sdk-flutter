@@ -304,8 +304,8 @@ public class BanubaSdkPluginImpl {
         }
 
         @Override
-        public void resumeVideoRecoding() {
-            Log.d(TAG, "resumeVideoRecoding");
+        public void resumeVideoRecording() {
+            Log.d(TAG, "resumeVideoRecording");
             getSdkManager().unpauseVideoRecording();
         }
 

@@ -442,8 +442,8 @@ class BanubaSdkManager {
 
   /// Resume screen recording after it was paused.
   /// @see pauseVideoRecording, startVideoRecording 
-  Future<void> resumeVideoRecoding() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.resumeVideoRecoding$pigeonVar_messageChannelSuffix';
+  Future<void> resumeVideoRecording() async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.resumeVideoRecording$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,

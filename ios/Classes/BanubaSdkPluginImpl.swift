@@ -136,8 +136,8 @@ public class BanubaSdkPluginImpl: NSObject, BanubaSdkManager, VideoRecorderDeleg
         banubaSdkManager.output?.pauseRecording()
     }
     
-    func resumeVideoRecoding()  {
-        Self.logger.debug("resumeVideoRecoding")
+    func resumeVideoRecording()  {
+        Self.logger.debug("resumeVideoRecording")
         banubaSdkManager.output?.resumeRecording()
     }
     

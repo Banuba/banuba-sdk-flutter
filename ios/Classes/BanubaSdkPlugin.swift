@@ -158,7 +158,7 @@ protocol BanubaSdkManager {
   func pauseVideoRecording() throws
   /// Resume screen recording after it was paused.
   /// @see pauseVideoRecording, startVideoRecording 
-  func resumeVideoRecoding() throws
+  func resumeVideoRecording() throws
   /// Takes photo from camera
   func takePhoto(filePath: String, width: Int64, height: Int64, completion: @escaping (Result<Void, Error>) -> Void)
   /// Sets camera facing: front, back
@@ -438,18 +438,18 @@ class BanubaSdkManagerSetup {
     }
     /// Resume screen recording after it was paused.
     /// @see pauseVideoRecording, startVideoRecording 
-    let resumeVideoRecodingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.resumeVideoRecoding\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let resumeVideoRecordingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.resumeVideoRecording\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
-      resumeVideoRecodingChannel.setMessageHandler { _, reply in
+      resumeVideoRecordingChannel.setMessageHandler { _, reply in
         do {
-          try api.resumeVideoRecoding()
+          try api.resumeVideoRecording()
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      resumeVideoRecodingChannel.setMessageHandler(nil)
+      resumeVideoRecordingChannel.setMessageHandler(nil)
     }
     /// Takes photo from camera
     let takePhotoChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.takePhoto\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
