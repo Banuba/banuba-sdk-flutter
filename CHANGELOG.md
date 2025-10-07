@@ -79,3 +79,7 @@
 
 ## 3.0.9
 * SDK version update
+
+## 3.0.10
+* Fix maven dependencies
+* Minor updates
