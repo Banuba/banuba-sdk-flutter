@@ -195,6 +195,12 @@ public class BanubaSdkPluginGen {
     void endEditingImage(@NonNull String destImageFilePath, @NonNull VoidResult result);
     /** Discard editing image mode */
     void discardEditingImage();
+    /** Adds FrameDataListener to EffectPlayer */
+    void addFrameDataListener();
+    /** Removes FrameDataListener from EffectPlayer */
+    void removeFrameDataListener();
+    /** Returns last face attributes string, can be null */
+    void getFaceAttributes(@NonNull NullableResult<String> result);
 
     /** The codec used by BanubaSdkManager. */
     static @NonNull MessageCodec<Object> getCodec() {
@@ -750,6 +756,75 @@ public class BanubaSdkPluginGen {
                   wrapped = wrapError(exception);
                 }
                 reply.reply(wrapped);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.addFrameDataListener" + messageChannelSuffix, getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<>();
+                try {
+                  api.addFrameDataListener();
+                  wrapped.add(0, null);
+                }
+ catch (Throwable exception) {
+                  wrapped = wrapError(exception);
+                }
+                reply.reply(wrapped);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.removeFrameDataListener" + messageChannelSuffix, getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<>();
+                try {
+                  api.removeFrameDataListener();
+                  wrapped.add(0, null);
+                }
+ catch (Throwable exception) {
+                  wrapped = wrapError(exception);
+                }
+                reply.reply(wrapped);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.getFaceAttributes" + messageChannelSuffix, getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<>();
+                NullableResult<String> resultCallback =
+                    new NullableResult<String>() {
+                      public void success(String result) {
+                        wrapped.add(0, result);
+                        reply.reply(wrapped);
+                      }
+
+                      public void error(Throwable error) {
+                        ArrayList<Object> wrappedError = wrapError(error);
+                        reply.reply(wrappedError);
+                      }
+                    };
+
+                api.getFaceAttributes(resultCallback);
               });
         } else {
           channel.setMessageHandler(null);

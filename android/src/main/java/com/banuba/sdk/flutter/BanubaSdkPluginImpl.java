@@ -17,12 +17,14 @@ import androidx.annotation.NonNull;
 import com.banuba.sdk.camera.Facing;
 import com.banuba.sdk.effect_player.CameraOrientation;
 import com.banuba.sdk.effect_player.Effect;
+import com.banuba.sdk.effect_player.FrameDataListener;
 import com.banuba.sdk.entity.ContentRatioParams;
 import com.banuba.sdk.entity.RecordedVideoInfo;
 import com.banuba.sdk.manager.BanubaSdkManager;
 import com.banuba.sdk.manager.BanubaSdkTouchListener;
 import com.banuba.sdk.manager.IEventCallback;
 import com.banuba.sdk.types.Data;
+import com.banuba.sdk.types.FrameData;
 import com.banuba.sdk.types.FullImageData;
 import com.banuba.sdk.types.PixelFormat;
 
@@ -162,12 +164,21 @@ public class BanubaSdkPluginImpl {
             }
         };
 
+        private final FrameDataListener mFrameDataListener = new FrameDataListener() {
+            @Override
+            public void onFrameDataProcessed(FrameData frameData) {
+                mFaceAttributes = String.valueOf(frameData != null ? frameData.getFaceAttributes() : null);
+            }
+        };
+
         public BanubaSdkManagerIml(@NonNull Context context) {
             mContext = context;
         }
 
         public void setActivity(Activity activity) {
         }
+
+        private String mFaceAttributes;
 
         @Override
         public void initialize(
@@ -494,6 +505,24 @@ public class BanubaSdkPluginImpl {
         public void discardEditingImage() {
             Log.d(TAG, "discardEditingImage");
             getSdkManager().stopEditingImage();
+        }
+
+        @Override
+        public void getFaceAttributes(@NonNull BanubaSdkPluginGen.NullableResult<String> result) {
+            Log.d(TAG, "getFaceAttributes");
+            result.success(mFaceAttributes);
+        }
+
+        @Override
+        public void addFrameDataListener() {
+            Log.d(TAG, "addFrameDataListener");
+            getSdkManager().getEffectPlayer().addFrameDataListener(mFrameDataListener);
+        }
+
+        @Override
+        public void removeFrameDataListener() {
+            Log.d(TAG, "removeFrameDataListener");
+            getSdkManager().getEffectPlayer().removeFrameDataListener(mFrameDataListener);
         }
 
         @Override
