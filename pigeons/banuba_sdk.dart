@@ -94,4 +94,16 @@ abstract class BanubaSdkManager {
 
   /// Discard editing image mode
   void discardEditingImage();
+
+  /// Adds FrameDataListener to EffectPlayer (Android)
+  @async
+  void addFrameDataListener();
+
+  /// Removes FrameDataListener from EffectPlayer (Android)
+  @async
+  void removeFrameDataListener();
+
+  /// Returns last face attributes string, can be null (Android)
+  @async
+  String? getFaceAttributes();
 }
