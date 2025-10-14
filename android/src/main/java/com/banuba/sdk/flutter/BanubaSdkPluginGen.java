@@ -202,6 +202,9 @@ public class BanubaSdkPluginGen {
     /** Returns last face attributes string, can be null */
     void getFaceAttributes(@NonNull NullableResult<String> result);
 
+    /** Returns last light correction string, can be null */
+    void getLightCorrection(@NonNull NullableResult<String> result);
+
     /** The codec used by BanubaSdkManager. */
     static @NonNull MessageCodec<Object> getCodec() {
       return PigeonCodec.INSTANCE;
@@ -830,6 +833,33 @@ public class BanubaSdkPluginGen {
           channel.setMessageHandler(null);
         }
       }
+        {
+            BasicMessageChannel<Object> channel =
+                    new BasicMessageChannel<>(
+                            binaryMessenger, "dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.getLightCorrection" + messageChannelSuffix, getCodec());
+            if (api != null) {
+                channel.setMessageHandler(
+                        (message, reply) -> {
+                            ArrayList<Object> wrapped = new ArrayList<>();
+                            NullableResult<String> resultCallback =
+                                    new NullableResult<String>() {
+                                        public void success(String result) {
+                                            wrapped.add(0, result);
+                                            reply.reply(wrapped);
+                                        }
+
+                                        public void error(Throwable error) {
+                                            ArrayList<Object> wrappedError = wrapError(error);
+                                            reply.reply(wrappedError);
+                                        }
+                                    };
+
+                            api.getLightCorrection(resultCallback);
+                        });
+            } else {
+                channel.setMessageHandler(null);
+            }
+        }
     }
   }
 }

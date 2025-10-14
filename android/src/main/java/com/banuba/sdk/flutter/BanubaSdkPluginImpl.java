@@ -18,6 +18,7 @@ import com.banuba.sdk.camera.Facing;
 import com.banuba.sdk.effect_player.CameraOrientation;
 import com.banuba.sdk.effect_player.Effect;
 import com.banuba.sdk.effect_player.FrameDataListener;
+import com.banuba.sdk.effect_player.LowLightListener;
 import com.banuba.sdk.entity.ContentRatioParams;
 import com.banuba.sdk.entity.RecordedVideoInfo;
 import com.banuba.sdk.manager.BanubaSdkManager;
@@ -167,7 +168,12 @@ public class BanubaSdkPluginImpl {
         private final FrameDataListener mFrameDataListener = new FrameDataListener() {
             @Override
             public void onFrameDataProcessed(FrameData frameData) {
-                mFaceAttributes = String.valueOf(frameData != null ? frameData.getFaceAttributes() : null);
+                mFaceAttributes = frameData.getFaceAttributes();
+                if (mFaceAttributes != null) {
+                    mLightSourceCorrection = String.valueOf(frameData.getLightCorrection());
+                } else {
+                    mLightSourceCorrection = null;
+                }
             }
         };
 
@@ -179,6 +185,7 @@ public class BanubaSdkPluginImpl {
         }
 
         private String mFaceAttributes;
+        private String mLightSourceCorrection;
 
         @Override
         public void initialize(
@@ -511,6 +518,12 @@ public class BanubaSdkPluginImpl {
         public void getFaceAttributes(@NonNull BanubaSdkPluginGen.NullableResult<String> result) {
             Log.d(TAG, "getFaceAttributes");
             result.success(mFaceAttributes);
+        }
+
+        @Override
+        public void getLightCorrection(@NonNull BanubaSdkPluginGen.NullableResult<String> result) {
+            Log.d(TAG, "getLightCorrection");
+            result.success(mLightSourceCorrection);
         }
 
         @Override
