@@ -203,7 +203,6 @@ public class BanubaSdkPluginImpl {
         }
 
         private String mFaceAttributes;
-        private String mLightSourceCorrection;
 
         @Override
         public void initialize(
