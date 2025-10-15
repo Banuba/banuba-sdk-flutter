@@ -8,6 +8,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.util.Size;
 import android.view.SurfaceView;
@@ -18,7 +20,6 @@ import com.banuba.sdk.camera.Facing;
 import com.banuba.sdk.effect_player.CameraOrientation;
 import com.banuba.sdk.effect_player.Effect;
 import com.banuba.sdk.effect_player.FrameDataListener;
-import com.banuba.sdk.effect_player.LowLightListener;
 import com.banuba.sdk.entity.ContentRatioParams;
 import com.banuba.sdk.entity.RecordedVideoInfo;
 import com.banuba.sdk.manager.BanubaSdkManager;
@@ -51,6 +52,8 @@ public class BanubaSdkPluginImpl {
         };
 
         private final Context mContext;
+        private final Handler mMainHandler = new Handler(Looper.getMainLooper());
+        private BanubaSdkPluginGen.FrameDataFlutterApi mFramesApi;
         private BanubaSdkManager mSdkManager;
 
         private BanubaSdkPluginGen.VoidResult mTakePhotoCallback;
@@ -168,24 +171,34 @@ public class BanubaSdkPluginImpl {
         private final FrameDataListener mFrameDataListener = new FrameDataListener() {
             @Override
             public void onFrameDataProcessed(FrameData frameData) {
-                mFaceAttributes = frameData.getFaceAttributes();
-                if (mFaceAttributes != null) {
-                    mLightSourceCorrection = String.valueOf(frameData.getLightCorrection());
-                } else {
-                    mLightSourceCorrection = null;
+                final String faceAttributes = frameData.getFaceAttributes();
+                final Double lightCorrection = (faceAttributes != null) ? Double.valueOf(frameData.getLightCorrection()) : null;
+
+                if (mFramesApi != null) {
+                    final BanubaSdkPluginGen.FrameDataDto dto = new BanubaSdkPluginGen.FrameDataDto.Builder()
+                            .setFaceAttributesJson(faceAttributes)
+                            .setLightCorrection(lightCorrection)
+                            .build();
+                    mMainHandler.post(() -> mFramesApi.onFrame(dto, new BanubaSdkPluginGen.VoidResult() {
+                        @Override
+                        public void success() {}
+
+                        @Override
+                        public void error(@NonNull Throwable error) {
+                            Log.w(TAG, "Failed to send onFrame via Pigeon", error);
+                        }
+                    }));
                 }
             }
         };
 
-        public BanubaSdkManagerIml(@NonNull Context context) {
+        public BanubaSdkManagerIml(@NonNull Context context, @NonNull io.flutter.plugin.common.BinaryMessenger messenger) {
             mContext = context;
+            mFramesApi = new BanubaSdkPluginGen.FrameDataFlutterApi(messenger);
         }
 
         public void setActivity(Activity activity) {
         }
-
-        private String mFaceAttributes;
-        private String mLightSourceCorrection;
 
         @Override
         public void initialize(
@@ -515,27 +528,17 @@ public class BanubaSdkPluginImpl {
         }
 
         @Override
-        public void getFaceAttributes(@NonNull BanubaSdkPluginGen.NullableResult<String> result) {
-            Log.d(TAG, "getFaceAttributes");
-            result.success(mFaceAttributes);
-        }
-
-        @Override
-        public void getLightCorrection(@NonNull BanubaSdkPluginGen.NullableResult<String> result) {
-            Log.d(TAG, "getLightCorrection");
-            result.success(mLightSourceCorrection);
-        }
-
-        @Override
-        public void addFrameDataListener() {
+        public void addFrameDataListener(@NonNull BanubaSdkPluginGen.VoidResult result) {
             Log.d(TAG, "addFrameDataListener");
             getSdkManager().getEffectPlayer().addFrameDataListener(mFrameDataListener);
+            result.success();
         }
 
         @Override
-        public void removeFrameDataListener() {
+        public void removeFrameDataListener(@NonNull BanubaSdkPluginGen.VoidResult result) {
             Log.d(TAG, "removeFrameDataListener");
             getSdkManager().getEffectPlayer().removeFrameDataListener(mFrameDataListener);
+            result.success();
         }
 
         @Override
