@@ -107,3 +107,13 @@ abstract class BanubaSdkManager {
   @async
   String? getFaceAttributes();
 }
+
+class FrameDataDto {
+  String? faceAttributesJson;
+  double? lightCorrection;
+}
+
+@FlutterApi()
+abstract class FrameDataFlutterApi {
+  void onFrame(FrameDataDto data);
+}

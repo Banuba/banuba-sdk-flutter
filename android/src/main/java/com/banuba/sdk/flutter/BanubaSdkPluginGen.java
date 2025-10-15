@@ -3,6 +3,9 @@
 
 package com.banuba.sdk.flutter;
 
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.RetentionPolicy.CLASS;
+
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,6 +14,8 @@ import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MessageCodec;
 import io.flutter.plugin.common.StandardMessageCodec;
 import java.io.ByteArrayOutputStream;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,6 +63,15 @@ public class BanubaSdkPluginGen {
     return errorList;
   }
 
+  @NonNull
+  protected static FlutterError createConnectionError(@NonNull String channelName) {
+    return new FlutterError("channel-error",  "Unable to establish connection on channel: " + channelName + ".", "");
+  }
+
+  @Target(METHOD)
+  @Retention(CLASS)
+  @interface CanIgnoreReturnValue {}
+
   public enum SeverityLevel {
     DEBUG(0),
     INFO(1),
@@ -68,6 +82,85 @@ public class BanubaSdkPluginGen {
 
     SeverityLevel(final int index) {
       this.index = index;
+    }
+  }
+
+  /** Generated class from Pigeon that represents data sent in messages. */
+  public static final class FrameDataDto {
+    private @Nullable String faceAttributesJson;
+
+    public @Nullable String getFaceAttributesJson() {
+      return faceAttributesJson;
+    }
+
+    public void setFaceAttributesJson(@Nullable String setterArg) {
+      this.faceAttributesJson = setterArg;
+    }
+
+    private @Nullable Double lightCorrection;
+
+    public @Nullable Double getLightCorrection() {
+      return lightCorrection;
+    }
+
+    public void setLightCorrection(@Nullable Double setterArg) {
+      this.lightCorrection = setterArg;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) { return true; }
+      if (o == null || getClass() != o.getClass()) { return false; }
+      FrameDataDto that = (FrameDataDto) o;
+      return Objects.equals(faceAttributesJson, that.faceAttributesJson) && Objects.equals(lightCorrection, that.lightCorrection);
+    }
+
+    @Override
+    public int hashCode() {
+      return Objects.hash(faceAttributesJson, lightCorrection);
+    }
+
+    public static final class Builder {
+
+      private @Nullable String faceAttributesJson;
+
+      @CanIgnoreReturnValue
+      public @NonNull Builder setFaceAttributesJson(@Nullable String setterArg) {
+        this.faceAttributesJson = setterArg;
+        return this;
+      }
+
+      private @Nullable Double lightCorrection;
+
+      @CanIgnoreReturnValue
+      public @NonNull Builder setLightCorrection(@Nullable Double setterArg) {
+        this.lightCorrection = setterArg;
+        return this;
+      }
+
+      public @NonNull FrameDataDto build() {
+        FrameDataDto pigeonReturn = new FrameDataDto();
+        pigeonReturn.setFaceAttributesJson(faceAttributesJson);
+        pigeonReturn.setLightCorrection(lightCorrection);
+        return pigeonReturn;
+      }
+    }
+
+    @NonNull
+    ArrayList<Object> toList() {
+      ArrayList<Object> toListResult = new ArrayList<>(2);
+      toListResult.add(faceAttributesJson);
+      toListResult.add(lightCorrection);
+      return toListResult;
+    }
+
+    static @NonNull FrameDataDto fromList(@NonNull ArrayList<Object> pigeonVar_list) {
+      FrameDataDto pigeonResult = new FrameDataDto();
+      Object faceAttributesJson = pigeonVar_list.get(0);
+      pigeonResult.setFaceAttributesJson((String) faceAttributesJson);
+      Object lightCorrection = pigeonVar_list.get(1);
+      pigeonResult.setLightCorrection((Double) lightCorrection);
+      return pigeonResult;
     }
   }
 
@@ -83,6 +176,8 @@ public class BanubaSdkPluginGen {
           Object value = readValue(buffer);
           return value == null ? null : SeverityLevel.values()[((Long) value).intValue()];
         }
+        case (byte) 130:
+          return FrameDataDto.fromList((ArrayList<Object>) readValue(buffer));
         default:
           return super.readValueOfType(type, buffer);
       }
@@ -93,6 +188,9 @@ public class BanubaSdkPluginGen {
       if (value instanceof SeverityLevel) {
         stream.write(129);
         writeValue(stream, value == null ? null : ((SeverityLevel) value).index);
+      } else if (value instanceof FrameDataDto) {
+        stream.write(130);
+        writeValue(stream, ((FrameDataDto) value).toList());
       } else {
         super.writeValue(stream, value);
       }
@@ -195,15 +293,12 @@ public class BanubaSdkPluginGen {
     void endEditingImage(@NonNull String destImageFilePath, @NonNull VoidResult result);
     /** Discard editing image mode */
     void discardEditingImage();
-    /** Adds FrameDataListener to EffectPlayer */
-    void addFrameDataListener();
-    /** Removes FrameDataListener from EffectPlayer */
-    void removeFrameDataListener();
-    /** Returns last face attributes string, can be null */
+    /** Adds FrameDataListener to EffectPlayer (Android) */
+    void addFrameDataListener(@NonNull VoidResult result);
+    /** Removes FrameDataListener from EffectPlayer (Android) */
+    void removeFrameDataListener(@NonNull VoidResult result);
+    /** Returns last face attributes string, can be null (Android) */
     void getFaceAttributes(@NonNull NullableResult<String> result);
-
-    /** Returns last light correction string, can be null */
-    void getLightCorrection(@NonNull NullableResult<String> result);
 
     /** The codec used by BanubaSdkManager. */
     static @NonNull MessageCodec<Object> getCodec() {
@@ -772,14 +867,20 @@ public class BanubaSdkPluginGen {
           channel.setMessageHandler(
               (message, reply) -> {
                 ArrayList<Object> wrapped = new ArrayList<>();
-                try {
-                  api.addFrameDataListener();
-                  wrapped.add(0, null);
-                }
- catch (Throwable exception) {
-                  wrapped = wrapError(exception);
-                }
-                reply.reply(wrapped);
+                VoidResult resultCallback =
+                    new VoidResult() {
+                      public void success() {
+                        wrapped.add(0, null);
+                        reply.reply(wrapped);
+                      }
+
+                      public void error(Throwable error) {
+                        ArrayList<Object> wrappedError = wrapError(error);
+                        reply.reply(wrappedError);
+                      }
+                    };
+
+                api.addFrameDataListener(resultCallback);
               });
         } else {
           channel.setMessageHandler(null);
@@ -793,14 +894,20 @@ public class BanubaSdkPluginGen {
           channel.setMessageHandler(
               (message, reply) -> {
                 ArrayList<Object> wrapped = new ArrayList<>();
-                try {
-                  api.removeFrameDataListener();
-                  wrapped.add(0, null);
-                }
- catch (Throwable exception) {
-                  wrapped = wrapError(exception);
-                }
-                reply.reply(wrapped);
+                VoidResult resultCallback =
+                    new VoidResult() {
+                      public void success() {
+                        wrapped.add(0, null);
+                        reply.reply(wrapped);
+                      }
+
+                      public void error(Throwable error) {
+                        ArrayList<Object> wrappedError = wrapError(error);
+                        reply.reply(wrappedError);
+                      }
+                    };
+
+                api.removeFrameDataListener(resultCallback);
               });
         } else {
           channel.setMessageHandler(null);
@@ -833,33 +940,47 @@ public class BanubaSdkPluginGen {
           channel.setMessageHandler(null);
         }
       }
-        {
-            BasicMessageChannel<Object> channel =
-                    new BasicMessageChannel<>(
-                            binaryMessenger, "dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.getLightCorrection" + messageChannelSuffix, getCodec());
-            if (api != null) {
-                channel.setMessageHandler(
-                        (message, reply) -> {
-                            ArrayList<Object> wrapped = new ArrayList<>();
-                            NullableResult<String> resultCallback =
-                                    new NullableResult<String>() {
-                                        public void success(String result) {
-                                            wrapped.add(0, result);
-                                            reply.reply(wrapped);
-                                        }
+    }
+  }
+  /** Generated class from Pigeon that represents Flutter messages that can be called from Java. */
+  public static class FrameDataFlutterApi {
+    private final @NonNull BinaryMessenger binaryMessenger;
+    private final String messageChannelSuffix;
 
-                                        public void error(Throwable error) {
-                                            ArrayList<Object> wrappedError = wrapError(error);
-                                            reply.reply(wrappedError);
-                                        }
-                                    };
+    public FrameDataFlutterApi(@NonNull BinaryMessenger argBinaryMessenger) {
+      this(argBinaryMessenger, "");
+    }
+    public FrameDataFlutterApi(@NonNull BinaryMessenger argBinaryMessenger, @NonNull String messageChannelSuffix) {
+      this.binaryMessenger = argBinaryMessenger;
+      this.messageChannelSuffix = messageChannelSuffix.isEmpty() ? "" : "." + messageChannelSuffix;
+    }
 
-                            api.getLightCorrection(resultCallback);
-                        });
-            } else {
-                channel.setMessageHandler(null);
-            }
-        }
+    /**
+     * Public interface for sending reply.
+     * The codec used by FrameDataFlutterApi.
+     */
+    static @NonNull MessageCodec<Object> getCodec() {
+      return PigeonCodec.INSTANCE;
+    }
+    public void onFrame(@NonNull FrameDataDto dataArg, @NonNull VoidResult result) {
+      final String channelName = "dev.flutter.pigeon.banuba_sdk.FrameDataFlutterApi.onFrame" + messageChannelSuffix;
+      BasicMessageChannel<Object> channel =
+          new BasicMessageChannel<>(
+              binaryMessenger, channelName, getCodec());
+      channel.send(
+          new ArrayList<>(Collections.singletonList(dataArg)),
+          channelReply -> {
+            if (channelReply instanceof List) {
+              List<Object> listReply = (List<Object>) channelReply;
+              if (listReply.size() > 1) {
+                result.error(new FlutterError((String) listReply.get(0), (String) listReply.get(1), listReply.get(2)));
+              } else {
+                result.success();
+              }
+            }  else {
+              result.error(createConnectionError(channelName));
+            } 
+          });
     }
   }
 }

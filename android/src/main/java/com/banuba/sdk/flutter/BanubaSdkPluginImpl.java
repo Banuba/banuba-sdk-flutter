@@ -8,6 +8,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.util.Size;
 import android.view.SurfaceView;
@@ -51,6 +53,8 @@ public class BanubaSdkPluginImpl {
         };
 
         private final Context mContext;
+        private final Handler mMainHandler = new Handler(Looper.getMainLooper());
+        private BanubaSdkPluginGen.FrameDataFlutterApi mFramesApi;
         private BanubaSdkManager mSdkManager;
 
         private BanubaSdkPluginGen.VoidResult mTakePhotoCallback;
@@ -169,16 +173,30 @@ public class BanubaSdkPluginImpl {
             @Override
             public void onFrameDataProcessed(FrameData frameData) {
                 mFaceAttributes = frameData.getFaceAttributes();
-                if (mFaceAttributes != null) {
-                    mLightSourceCorrection = String.valueOf(frameData.getLightCorrection());
-                } else {
-                    mLightSourceCorrection = null;
+                final Double lightCorrection = (mFaceAttributes != null) ? Double.valueOf(frameData.getLightCorrection()) : null;
+                mLightSourceCorrection = lightCorrection != null ? String.valueOf(lightCorrection) : null;
+
+                if (mFramesApi != null) {
+                    final BanubaSdkPluginGen.FrameDataDto dto = new BanubaSdkPluginGen.FrameDataDto.Builder()
+                            .setFaceAttributesJson(frameData.getFaceAttributes())
+                            .setLightCorrection(lightCorrection)
+                            .build();
+                    mMainHandler.post(() -> mFramesApi.onFrame(dto, new BanubaSdkPluginGen.VoidResult() {
+                        @Override
+                        public void success() {}
+
+                        @Override
+                        public void error(@NonNull Throwable error) {
+                            Log.w(TAG, "Failed to send onFrame via Pigeon", error);
+                        }
+                    }));
                 }
             }
         };
 
-        public BanubaSdkManagerIml(@NonNull Context context) {
+        public BanubaSdkManagerIml(@NonNull Context context, @NonNull io.flutter.plugin.common.BinaryMessenger messenger) {
             mContext = context;
+            mFramesApi = new BanubaSdkPluginGen.FrameDataFlutterApi(messenger);
         }
 
         public void setActivity(Activity activity) {
@@ -521,21 +539,17 @@ public class BanubaSdkPluginImpl {
         }
 
         @Override
-        public void getLightCorrection(@NonNull BanubaSdkPluginGen.NullableResult<String> result) {
-            Log.d(TAG, "getLightCorrection");
-            result.success(mLightSourceCorrection);
-        }
-
-        @Override
-        public void addFrameDataListener() {
+        public void addFrameDataListener(@NonNull BanubaSdkPluginGen.VoidResult result) {
             Log.d(TAG, "addFrameDataListener");
             getSdkManager().getEffectPlayer().addFrameDataListener(mFrameDataListener);
+            result.success();
         }
 
         @Override
-        public void removeFrameDataListener() {
+        public void removeFrameDataListener(@NonNull BanubaSdkPluginGen.VoidResult result) {
             Log.d(TAG, "removeFrameDataListener");
             getSdkManager().getEffectPlayer().removeFrameDataListener(mFrameDataListener);
+            result.success();
         }
 
         @Override

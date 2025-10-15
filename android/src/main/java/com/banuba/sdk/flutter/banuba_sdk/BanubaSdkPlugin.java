@@ -24,7 +24,10 @@ public class BanubaSdkPlugin implements FlutterPlugin, ActivityAware {
         flutterPluginBinding.getPlatformViewRegistry().registerViewFactory(
             "effect_player_view", new NativeViewFactory()
         );
-        mManagerImpl = new BanubaSdkManagerIml(flutterPluginBinding.getApplicationContext());
+        mManagerImpl = new BanubaSdkManagerIml(
+            flutterPluginBinding.getApplicationContext(),
+            flutterPluginBinding.getBinaryMessenger()
+        );
         BanubaSdkManager.setUp(flutterPluginBinding.getBinaryMessenger(), mManagerImpl);
 
     }

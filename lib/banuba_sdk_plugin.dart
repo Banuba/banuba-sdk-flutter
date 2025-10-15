@@ -15,11 +15,47 @@ PlatformException _createConnectionError(String channelName) {
   );
 }
 
+List<Object?> wrapResponse({Object? result, PlatformException? error, bool empty = false}) {
+  if (empty) {
+    return <Object?>[];
+  }
+  if (error == null) {
+    return <Object?>[result];
+  }
+  return <Object?>[error.code, error.message, error.details];
+}
+
 enum SeverityLevel {
   debug,
   info,
   warning,
   error,
+}
+
+class FrameDataDto {
+  FrameDataDto({
+    this.faceAttributesJson,
+    this.lightCorrection,
+  });
+
+  String? faceAttributesJson;
+
+  double? lightCorrection;
+
+  Object encode() {
+    return <Object?>[
+      faceAttributesJson,
+      lightCorrection,
+    ];
+  }
+
+  static FrameDataDto decode(Object result) {
+    result as List<Object?>;
+    return FrameDataDto(
+      faceAttributesJson: result[0] as String?,
+      lightCorrection: result[1] as double?,
+    );
+  }
 }
 
 
@@ -33,6 +69,9 @@ class _PigeonCodec extends StandardMessageCodec {
     }    else if (value is SeverityLevel) {
       buffer.putUint8(129);
       writeValue(buffer, value.index);
+    }    else if (value is FrameDataDto) {
+      buffer.putUint8(130);
+      writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
     }
@@ -44,6 +83,8 @@ class _PigeonCodec extends StandardMessageCodec {
       case 129: 
         final int? value = readValue(buffer) as int?;
         return value == null ? null : SeverityLevel.values[value];
+      case 130: 
+        return FrameDataDto.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
     }
@@ -667,30 +708,42 @@ class BanubaSdkManager {
         details: pigeonVar_replyList[2],
       );
     } else {
-      return (pigeonVar_replyList.isNotEmpty ? pigeonVar_replyList[0] as String? : null);
+      return (pigeonVar_replyList[0] as String?);
     }
   }
+}
 
-  /// Returns last light correction string, can be null (Android)
-  Future<String?> getLightCorrection() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.getLightCorrection$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final List<Object?>? pigeonVar_replyList =
-    await pigeonVar_channel.send(null) as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else {
-      return (pigeonVar_replyList.isNotEmpty ? pigeonVar_replyList[0] as String? : null);
+abstract class FrameDataFlutterApi {
+  static const MessageCodec<Object?> pigeonChannelCodec = _PigeonCodec();
+
+  void onFrame(FrameDataDto data);
+
+  static void setUp(FrameDataFlutterApi? api, {BinaryMessenger? binaryMessenger, String messageChannelSuffix = '',}) {
+    messageChannelSuffix = messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.banuba_sdk.FrameDataFlutterApi.onFrame$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        pigeonVar_channel.setMessageHandler(null);
+      } else {
+        pigeonVar_channel.setMessageHandler((Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.banuba_sdk.FrameDataFlutterApi.onFrame was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final FrameDataDto? arg_data = (args[0] as FrameDataDto?);
+          assert(arg_data != null,
+              'Argument for dev.flutter.pigeon.banuba_sdk.FrameDataFlutterApi.onFrame was null, expected non-null FrameDataDto.');
+          try {
+            api.onFrame(arg_data!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
     }
   }
 }
