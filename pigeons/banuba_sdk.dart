@@ -102,10 +102,6 @@ abstract class BanubaSdkManager {
   /// Removes FrameDataListener from EffectPlayer (Android)
   @async
   void removeFrameDataListener();
-
-  /// Returns last face attributes string, can be null (Android)
-  @async
-  String? getFaceAttributes();
 }
 
 class FrameDataDto {

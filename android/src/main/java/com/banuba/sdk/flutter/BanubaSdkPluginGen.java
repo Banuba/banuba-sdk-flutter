@@ -297,8 +297,6 @@ public class BanubaSdkPluginGen {
     void addFrameDataListener(@NonNull VoidResult result);
     /** Removes FrameDataListener from EffectPlayer (Android) */
     void removeFrameDataListener(@NonNull VoidResult result);
-    /** Returns last face attributes string, can be null (Android) */
-    void getFaceAttributes(@NonNull NullableResult<String> result);
 
     /** The codec used by BanubaSdkManager. */
     static @NonNull MessageCodec<Object> getCodec() {
@@ -908,33 +906,6 @@ public class BanubaSdkPluginGen {
                     };
 
                 api.removeFrameDataListener(resultCallback);
-              });
-        } else {
-          channel.setMessageHandler(null);
-        }
-      }
-      {
-        BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(
-                binaryMessenger, "dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.getFaceAttributes" + messageChannelSuffix, getCodec());
-        if (api != null) {
-          channel.setMessageHandler(
-              (message, reply) -> {
-                ArrayList<Object> wrapped = new ArrayList<>();
-                NullableResult<String> resultCallback =
-                    new NullableResult<String>() {
-                      public void success(String result) {
-                        wrapped.add(0, result);
-                        reply.reply(wrapped);
-                      }
-
-                      public void error(Throwable error) {
-                        ArrayList<Object> wrappedError = wrapError(error);
-                        reply.reply(wrappedError);
-                      }
-                    };
-
-                api.getFaceAttributes(resultCallback);
               });
         } else {
           channel.setMessageHandler(null);

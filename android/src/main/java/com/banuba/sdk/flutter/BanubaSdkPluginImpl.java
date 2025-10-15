@@ -172,13 +172,12 @@ public class BanubaSdkPluginImpl {
         private final FrameDataListener mFrameDataListener = new FrameDataListener() {
             @Override
             public void onFrameDataProcessed(FrameData frameData) {
-                mFaceAttributes = frameData.getFaceAttributes();
-                final Double lightCorrection = (mFaceAttributes != null) ? Double.valueOf(frameData.getLightCorrection()) : null;
-                mLightSourceCorrection = lightCorrection != null ? String.valueOf(lightCorrection) : null;
+                final String faceAttributes = frameData.getFaceAttributes();
+                final Double lightCorrection = (faceAttributes != null) ? Double.valueOf(frameData.getLightCorrection()) : null;
 
                 if (mFramesApi != null) {
                     final BanubaSdkPluginGen.FrameDataDto dto = new BanubaSdkPluginGen.FrameDataDto.Builder()
-                            .setFaceAttributesJson(frameData.getFaceAttributes())
+                            .setFaceAttributesJson(faceAttributes)
                             .setLightCorrection(lightCorrection)
                             .build();
                     mMainHandler.post(() -> mFramesApi.onFrame(dto, new BanubaSdkPluginGen.VoidResult() {
@@ -201,8 +200,6 @@ public class BanubaSdkPluginImpl {
 
         public void setActivity(Activity activity) {
         }
-
-        private String mFaceAttributes;
 
         @Override
         public void initialize(
@@ -529,12 +526,6 @@ public class BanubaSdkPluginImpl {
         public void discardEditingImage() {
             Log.d(TAG, "discardEditingImage");
             getSdkManager().stopEditingImage();
-        }
-
-        @Override
-        public void getFaceAttributes(@NonNull BanubaSdkPluginGen.NullableResult<String> result) {
-            Log.d(TAG, "getFaceAttributes");
-            result.success(mFaceAttributes);
         }
 
         @Override
