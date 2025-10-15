@@ -2,27 +2,63 @@
 
 ## Overview
 
-The [Banuba Face AR Plugin](https://docs.banuba.com/far-sdk/tutorials/development/basic_integration?platform=flutter) offers a comprehensive suite of augmented reality features for enhancing photos and live video feeds. Key features include:
-- Face and hand tracking
+Quickly add AR filters, virtual backgrounds, digital makeup, and other features 
+to your app with 
+[Banuba Face AR Plugin](https://docs.banuba.com/far-sdk/tutorials/development/basic_integration?platform=flutter).
+
+Diverse functionalities and easy integration makes this plugin a perfect fit for 
+many niches:
+
+- Video conferencing
+- Social media
+- eCommerce
+- eLearning
+- Security
+- Banking & Finance
+- Healthcare
+- Gaming
+
+Key features:
+
+- AR face tracking
+- Hand tracking
 - 3D face filters
-- Virtual try-on for various accessories
+- Virtual makeup
 - Color filters (LUTs)
 - Face touch-up
 - Virtual backgrounds
-- Screen recording and screenshot capabilities
+- Virtual try-on of accessories, rings, piercings, etc.
+- Biometric matching
+- Teeth bleaching simulation
+- Etc.
+
+Banuba Face AR Flutter plugin doesn’t collect any user data and everything is 
+processed on the user’s device. This means it is secure by design and 
+**compliant with GDPR and other similar regulations**.
+
+Besides Flutter, Banuba Face AR SDK is also compatible with:
+
+- Native Android
+- Native iOS
+- React Native
+- Web
+- Mac
+- Windows
+- Unity
 
 
-## Requirements
-
-- **Android**: API level 26 (Android 8) or higher
-- **iOS**: Version 14.0 or higher
+## [Requirements](https://docs.banuba.com/far-sdk/tutorials/capabilities/system_requirements)
 
 ## Usage
 
 ### License
 
-Test all SDK features for free during a 14-day trial. Send us a message to start the to start your [Face AR trial](https://www.banuba.com/facear-sdk/face-filters#form).
-Feel free to [contact us](https://www.banuba.com/support) if you have any questions regarding Banuba Flutter Plugin.
+[Start a 14-day free trial](https://www.banuba.com/facear-sdk/face-filters#form) 
+and see how Face AR SDK Flutter plugin works. No credit card information is 
+needed.
+
+Feel free to [contact us](https://www.banuba.com/support) if you have any 
+questions regarding this plugin.
 
 ### Installation
 
@@ -61,12 +97,3 @@ Follow our [Integration Guide](mdDocs/integration_guide.md) for detailed integra
 - [Flutter AR Features](https://www.banuba.com/blog/flutter-ar-features-integration)
 - [Face AR SDK](https://www.banuba.com/facear-sdk/face-filters)
 - [More about Banuba](https://www.banuba.com/)
-
-### Dependencies
-
-| Platform  | Version |
-|:---------:|:-------:|
-|   Dart    |  3.3.0  |
-|  Flutter  | 3.19.2  |
-|  Android  |  8.0+   |
-|    iOS    |  14.0+  |

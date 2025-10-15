@@ -83,3 +83,6 @@
 ## 3.0.10
 * Fix maven dependencies
 * Minor updates
+
+## 3.0.11
+* Update `README`
