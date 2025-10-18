@@ -46,5 +46,5 @@ android {
 
 dependencies {
     // Banuba SDK dependencies
-    implementation "com.banuba.sdk:sdk_api:$project.bnb_sdk_version"
+    implementation "com.bnbtest.sdk:sdk_api:$project.bnb_sdk_version"
 }
