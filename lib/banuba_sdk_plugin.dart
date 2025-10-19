@@ -36,16 +36,28 @@ class FrameDataDto {
   FrameDataDto({
     this.faceAttributesJson,
     this.lightCorrection,
+    this.isEyesOpen,
+    this.faceShape,
+    this.eyeWear,
   });
 
   String? faceAttributesJson;
 
   double? lightCorrection;
 
+  bool? isEyesOpen;
+
+  String? faceShape;
+
+  String? eyeWear;
+
   Object encode() {
     return <Object?>[
       faceAttributesJson,
       lightCorrection,
+      isEyesOpen,
+      faceShape,
+      eyeWear,
     ];
   }
 
@@ -54,6 +66,9 @@ class FrameDataDto {
     return FrameDataDto(
       faceAttributesJson: result[0] as String?,
       lightCorrection: result[1] as double?,
+      isEyesOpen: result[2] as bool?,
+      faceShape: result[3] as String?,
+      eyeWear: result[4] as String?,
     );
   }
 }

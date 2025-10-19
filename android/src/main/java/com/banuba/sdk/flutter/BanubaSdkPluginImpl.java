@@ -173,11 +173,24 @@ public class BanubaSdkPluginImpl {
             public void onFrameDataProcessed(FrameData frameData) {
                 final String faceAttributes = frameData.getFaceAttributes();
                 final Double lightCorrection = (faceAttributes != null) ? Double.valueOf(frameData.getLightCorrection()) : null;
-
+                final Boolean isEyesOpen = (faceAttributes != null)
+                        ? (frameData.getEyesState().getIsOpenLeft() && frameData.getEyesState().getIsOpenRight())
+                        : null;
+                final String faceShape = (faceAttributes != null)
+                        ? String.valueOf(frameData.getFaceShape())
+                        : null;
+                final String eyeWear = (faceAttributes != null)
+                        ? (frameData.getFrxRecognitionResult().getFaces().get(0).getEyewear() != null
+                            ? String.valueOf(frameData.getFrxRecognitionResult().getFaces().get(0).getEyewear())
+                            : null)
+                        : null;
                 if (mFramesApi != null) {
                     final BanubaSdkPluginGen.FrameDataDto dto = new BanubaSdkPluginGen.FrameDataDto.Builder()
                             .setFaceAttributesJson(faceAttributes)
                             .setLightCorrection(lightCorrection)
+                            .setIsEyesOpen(isEyesOpen)
+                            .setFaceShape(faceShape)
+                            .setEyeWear(eyeWear)
                             .build();
                     mMainHandler.post(() -> mFramesApi.onFrame(dto, new BanubaSdkPluginGen.VoidResult() {
                         @Override

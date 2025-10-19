@@ -107,6 +107,9 @@ abstract class BanubaSdkManager {
 class FrameDataDto {
   String? faceAttributesJson;
   double? lightCorrection;
+  bool? isEyesOpen;
+  String? faceShape;
+  String? eyeWear;
 }
 
 @FlutterApi()

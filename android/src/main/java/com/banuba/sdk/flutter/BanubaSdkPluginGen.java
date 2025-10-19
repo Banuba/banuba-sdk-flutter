@@ -107,17 +107,47 @@ public class BanubaSdkPluginGen {
       this.lightCorrection = setterArg;
     }
 
+    private @Nullable Boolean isEyesOpen;
+
+    public @Nullable Boolean getIsEyesOpen() {
+      return isEyesOpen;
+    }
+
+    public void setIsEyesOpen(@Nullable Boolean setterArg) {
+      this.isEyesOpen = setterArg;
+    }
+
+    private @Nullable String faceShape;
+
+    public @Nullable String getFaceShape() {
+      return faceShape;
+    }
+
+    public void setFaceShape(@Nullable String setterArg) {
+      this.faceShape = setterArg;
+    }
+
+    private @Nullable String eyeWear;
+
+    public @Nullable String getEyeWear() {
+      return eyeWear;
+    }
+
+    public void setEyeWear(@Nullable String setterArg) {
+      this.eyeWear = setterArg;
+    }
+
     @Override
     public boolean equals(Object o) {
       if (this == o) { return true; }
       if (o == null || getClass() != o.getClass()) { return false; }
       FrameDataDto that = (FrameDataDto) o;
-      return Objects.equals(faceAttributesJson, that.faceAttributesJson) && Objects.equals(lightCorrection, that.lightCorrection);
+      return Objects.equals(faceAttributesJson, that.faceAttributesJson) && Objects.equals(lightCorrection, that.lightCorrection) && Objects.equals(isEyesOpen, that.isEyesOpen) && Objects.equals(faceShape, that.faceShape) && Objects.equals(eyeWear, that.eyeWear);
     }
 
     @Override
     public int hashCode() {
-      return Objects.hash(faceAttributesJson, lightCorrection);
+      return Objects.hash(faceAttributesJson, lightCorrection, isEyesOpen, faceShape, eyeWear);
     }
 
     public static final class Builder {
@@ -138,19 +168,49 @@ public class BanubaSdkPluginGen {
         return this;
       }
 
+      private @Nullable Boolean isEyesOpen;
+
+      @CanIgnoreReturnValue
+      public @NonNull Builder setIsEyesOpen(@Nullable Boolean setterArg) {
+        this.isEyesOpen = setterArg;
+        return this;
+      }
+
+      private @Nullable String faceShape;
+
+      @CanIgnoreReturnValue
+      public @NonNull Builder setFaceShape(@Nullable String setterArg) {
+        this.faceShape = setterArg;
+        return this;
+      }
+
+      private @Nullable String eyeWear;
+
+      @CanIgnoreReturnValue
+      public @NonNull Builder setEyeWear(@Nullable String setterArg) {
+        this.eyeWear = setterArg;
+        return this;
+      }
+
       public @NonNull FrameDataDto build() {
         FrameDataDto pigeonReturn = new FrameDataDto();
         pigeonReturn.setFaceAttributesJson(faceAttributesJson);
         pigeonReturn.setLightCorrection(lightCorrection);
+        pigeonReturn.setIsEyesOpen(isEyesOpen);
+        pigeonReturn.setFaceShape(faceShape);
+        pigeonReturn.setEyeWear(eyeWear);
         return pigeonReturn;
       }
     }
 
     @NonNull
     ArrayList<Object> toList() {
-      ArrayList<Object> toListResult = new ArrayList<>(2);
+      ArrayList<Object> toListResult = new ArrayList<>(5);
       toListResult.add(faceAttributesJson);
       toListResult.add(lightCorrection);
+      toListResult.add(isEyesOpen);
+      toListResult.add(faceShape);
+      toListResult.add(eyeWear);
       return toListResult;
     }
 
@@ -160,6 +220,12 @@ public class BanubaSdkPluginGen {
       pigeonResult.setFaceAttributesJson((String) faceAttributesJson);
       Object lightCorrection = pigeonVar_list.get(1);
       pigeonResult.setLightCorrection((Double) lightCorrection);
+      Object isEyesOpen = pigeonVar_list.get(2);
+      pigeonResult.setIsEyesOpen((Boolean) isEyesOpen);
+      Object faceShape = pigeonVar_list.get(3);
+      pigeonResult.setFaceShape((String) faceShape);
+      Object eyeWear = pigeonVar_list.get(4);
+      pigeonResult.setEyeWear((String) eyeWear);
       return pigeonResult;
     }
   }
