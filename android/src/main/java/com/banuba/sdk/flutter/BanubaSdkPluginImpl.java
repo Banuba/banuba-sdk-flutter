@@ -435,6 +435,22 @@ public class BanubaSdkPluginImpl {
             @NonNull String destFilePath,
             @NonNull BanubaSdkPluginGen.VoidResult res
         ) {
+            // Обертка: запускаем обработку в background потоке
+            mThreadPool.submit(() -> {
+                try {
+                    processImageInternal(sourceFilePath, destFilePath, res);
+                } catch (Exception e) {
+                    Log.w(TAG, "Error in processImage wrapper", e);
+                    res.error(e);
+                }
+            });
+        }
+
+        private void processImageInternal(
+            @NonNull String sourceFilePath,
+            @NonNull String destFilePath,
+            @NonNull BanubaSdkPluginGen.VoidResult res
+        ) {
             final File destFile = new File(destFilePath);
 
             Log.w(TAG, "DEPTECATED! processImage: dest file exists = " + new File(sourceFilePath).exists());
