@@ -41,6 +41,8 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.RunnableFuture;
 import java.util.concurrent.TimeUnit;
 
+import org.json.JSONObject;
+
 public class BanubaSdkPluginImpl {
     private static final String TAG = "BanubaSdkPlugin";
 
@@ -171,36 +173,62 @@ public class BanubaSdkPluginImpl {
         private final FrameDataListener mFrameDataListener = new FrameDataListener() {
             @Override
             public void onFrameDataProcessed(FrameData frameData) {
-                final String faceAttributes = frameData.getFaceAttributes();
-                final Double lightCorrection = (faceAttributes != null) ? Double.valueOf(frameData.getLightCorrection()) : null;
-                final Boolean isEyesOpen = (faceAttributes != null)
-                        ? (frameData.getEyesState().getIsOpenLeft() && frameData.getEyesState().getIsOpenRight())
-                        : null;
-                final String faceShape = (faceAttributes != null)
-                        ? String.valueOf(frameData.getFaceShape())
-                        : null;
-                final String eyeWear = (faceAttributes != null)
-                        ? (frameData.getFrxRecognitionResult().getFaces().get(0).getEyewear() != null
+                if (mFramesApi == null) {
+                    return;
+                }
+
+                try {
+                    final String faceAttributes = frameData.getFaceAttributes();
+                    final Double lightCorrection = (faceAttributes != null) ? Double.valueOf(frameData.getLightCorrection()) : null;
+                    final Boolean isEyesOpen = (faceAttributes != null)
+                            ? (frameData.getEyesState().getIsOpenLeft() && frameData.getEyesState().getIsOpenRight())
+                            : null;
+                    final String faceShape = (faceAttributes != null)
+                            ? String.valueOf(frameData.getFaceShape())
+                            : null;
+                    final String frameColor = (faceAttributes != null)
+                            ? frameData.getGlassesFrameColor().toString()
+                            : null;
+                    final String eyeWear = (faceAttributes != null)
                             ? String.valueOf(frameData.getFrxRecognitionResult().getFaces().get(0).getEyewear())
-                            : null)
-                        : null;
-                if (mFramesApi != null) {
+                            : null;
+
+                    final JSONObject jsonObject = new JSONObject();
+                    if (faceAttributes != null) {
+                        jsonObject.put("faceAttributesJson", faceAttributes);
+                    }
+                    if (lightCorrection != null) {
+                        jsonObject.put("lightCorrection", lightCorrection);
+                    }
+                    if (isEyesOpen != null) {
+                        jsonObject.put("isEyesOpen", isEyesOpen);
+                    }
+                    if (faceShape != null) {
+                        jsonObject.put("faceShape", faceShape);
+                    }
+                    if (frameColor != null) {
+                        jsonObject.put("frameColor", frameColor);
+                    }
+                    if (eyeWear != null) {
+                        jsonObject.put("eyeWear", eyeWear);
+                    }
+
+                    final String frameDataJson = jsonObject.toString();
+
                     final BanubaSdkPluginGen.FrameDataDto dto = new BanubaSdkPluginGen.FrameDataDto.Builder()
-                            .setFaceAttributesJson(faceAttributes)
-                            .setLightCorrection(lightCorrection)
-                            .setIsEyesOpen(isEyesOpen)
-                            .setFaceShape(faceShape)
-                            .setEyeWear(eyeWear)
+                            .setFrameDataJson(frameDataJson)
                             .build();
+
                     mMainHandler.post(() -> mFramesApi.onFrame(dto, new BanubaSdkPluginGen.VoidResult() {
-                        @Override
-                        public void success() {}
+                        @Override public void success() {}
 
                         @Override
                         public void error(@NonNull Throwable error) {
                             Log.w(TAG, "Failed to send onFrame via Pigeon", error);
                         }
                     }));
+                } catch (Exception e) {
+                    Log.w(TAG, "Error processing frame data", e);
                 }
             }
         };
@@ -435,7 +463,7 @@ public class BanubaSdkPluginImpl {
             @NonNull String destFilePath,
             @NonNull BanubaSdkPluginGen.VoidResult res
         ) {
-            // Обертка: запускаем обработку в background потоке
+
             mThreadPool.submit(() -> {
                 try {
                     processImageInternal(sourceFilePath, destFilePath, res);
