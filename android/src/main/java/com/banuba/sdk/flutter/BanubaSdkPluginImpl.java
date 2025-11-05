@@ -461,12 +461,14 @@ public class BanubaSdkPluginImpl {
         public void processImage(
             @NonNull String sourceFilePath,
             @NonNull String destFilePath,
+            @NonNull Long quality,
             @NonNull BanubaSdkPluginGen.VoidResult res
         ) {
+            final int qualityInt = quality.intValue();
 
             mThreadPool.submit(() -> {
                 try {
-                    processImageInternal(sourceFilePath, destFilePath, res);
+                    processImageInternal(sourceFilePath, destFilePath, qualityInt, res);
                 } catch (Exception e) {
                     Log.w(TAG, "Error in processImage wrapper", e);
                     res.error(e);
@@ -477,6 +479,7 @@ public class BanubaSdkPluginImpl {
         private void processImageInternal(
             @NonNull String sourceFilePath,
             @NonNull String destFilePath,
+            int quality,
             @NonNull BanubaSdkPluginGen.VoidResult res
         ) {
             final File destFile = new File(destFilePath);
@@ -546,7 +549,7 @@ public class BanubaSdkPluginImpl {
                     }
                 };
 
-                saveImageAndNotify(processed, 100, destFile, res, cleanup);
+                saveImageAndNotify(processed, quality, destFile, res, cleanup);
             } catch (Exception e) {
                 Log.w(TAG, "Cannot process image!", e);
                 res.error(e);

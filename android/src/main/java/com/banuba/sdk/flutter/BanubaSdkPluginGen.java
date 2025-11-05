@@ -264,7 +264,7 @@ public class BanubaSdkPluginGen {
     /** Sets camera facing: front, back */
     void setCameraFacing(@NonNull Boolean front);
     /** Processes image with applied effect */
-    void processImage(@NonNull String sourceFilePath, @NonNull String destFilePath, @NonNull VoidResult result);
+    void processImage(@NonNull String sourceFilePath, @NonNull String destFilePath, @NonNull Long quality, @NonNull VoidResult result);
     /** Starts image editing mode */
     void startEditingImage(@NonNull String sourceImageFilePath, @NonNull VoidResult result);
     /** Ending editing image and save result to destination file */
@@ -737,6 +737,7 @@ public class BanubaSdkPluginGen {
                 ArrayList<Object> args = (ArrayList<Object>) message;
                 String sourceFilePathArg = (String) args.get(0);
                 String destFilePathArg = (String) args.get(1);
+                Long qualityArg = (Long) args.get(2);
                 VoidResult resultCallback =
                     new VoidResult() {
                       public void success() {
@@ -750,7 +751,7 @@ public class BanubaSdkPluginGen {
                       }
                     };
 
-                api.processImage(sourceFilePathArg, destFilePathArg, resultCallback);
+                api.processImage(sourceFilePathArg, destFilePathArg, qualityArg, resultCallback);
               });
         } else {
           channel.setMessageHandler(null);

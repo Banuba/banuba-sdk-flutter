@@ -82,7 +82,7 @@ abstract class BanubaSdkManager {
 
   /// Processes image with applied effect
   @async
-  void processImage(String sourceFilePath, String destFilePath);
+  void processImage(String sourceFilePath, String destFilePath, int quality);
 
   /// Starts image editing mode
   @async

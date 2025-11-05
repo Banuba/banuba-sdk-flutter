@@ -547,7 +547,7 @@ class BanubaSdkManager {
   }
 
   /// Processes image with applied effect
-  Future<void> processImage(String sourceFilePath, String destFilePath) async {
+  Future<void> processImage(String sourceFilePath, String destFilePath, int quality) async {
     final String pigeonVar_channelName = 'dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.processImage$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -555,7 +555,7 @@ class BanubaSdkManager {
       binaryMessenger: pigeonVar_binaryMessenger,
     );
     final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(<Object?>[sourceFilePath, destFilePath]) as List<Object?>?;
+        await pigeonVar_channel.send(<Object?>[sourceFilePath, destFilePath, quality]) as List<Object?>?;
     if (pigeonVar_replyList == null) {
       throw _createConnectionError(pigeonVar_channelName);
     } else if (pigeonVar_replyList.length > 1) {
