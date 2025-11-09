@@ -66,7 +66,7 @@ public class BanubaSdkPluginImpl {
 
         private File mEditedImageFile;
 
-        private final ExecutorService mThreadPool = Executors.newFixedThreadPool(2);
+        private final ExecutorService mThreadPool = Executors.newFixedThreadPool(10);
 
         private final IEventCallback mCallback = new IEventCallback() {
             @Override
@@ -332,10 +332,16 @@ public class BanubaSdkPluginImpl {
         @Override
         public void evalJs(@NonNull String script) {
             Log.d(TAG, "evalJs = " + script);
-            Effect current = getSdkManager().getEffectManager().current();
-            if (current != null) {
-                current.evalJs(script, null);
-            }
+            mThreadPool.submit(() -> {
+                try {
+                    Effect current = getSdkManager().getEffectManager().current();
+                    if (current != null) {
+                        current.evalJs(script, null);
+                    }
+                } catch (Exception e) {
+                    Log.w(TAG, "Error executing evalJs", e);
+                }
+            });
         }
 
         @Override
