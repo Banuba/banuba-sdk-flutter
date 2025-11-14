@@ -49,8 +49,7 @@ public class BanubaSdkPluginImpl {
     public static class BanubaSdkManagerIml implements BanubaSdkPluginGen.BanubaSdkManager {
         private static final String[] PERMISSIONS = new String[]{
                 Manifest.permission.CAMERA,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.RECORD_AUDIO
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
         };
 
         private final Context mContext;
@@ -66,7 +65,7 @@ public class BanubaSdkPluginImpl {
 
         private File mEditedImageFile;
 
-        private final ExecutorService mThreadPool = Executors.newFixedThreadPool(10);
+        private final ExecutorService mThreadPool = Executors.newFixedThreadPool(1);
 
         private final IEventCallback mCallback = new IEventCallback() {
             @Override
