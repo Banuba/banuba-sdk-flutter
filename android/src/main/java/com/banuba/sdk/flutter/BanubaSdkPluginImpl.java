@@ -176,51 +176,50 @@ public class BanubaSdkPluginImpl {
                     return;
                 }
 
-                Boolean hasFace = null;
+                boolean hasFace = false;
                 String faceAttributes = null;
                 Double lightCorrection = null;
-                Boolean isEyesOpen = null;
+                boolean isEyesOpen = false;
                 String faceShape = null;
                 String frameColor = null;
                 String eyeWear = null;
 
                 try {
-                    faceAttributes = frameData.getFaceAttributes();
                     hasFace = frameData.getFrxRecognitionResult().getFaces().get(0).hasFace();
+                    eyeWear = String.valueOf(frameData.getFrxRecognitionResult().getFaces().get(0).getEyewear());
+                } catch (java.lang.Exception e) {}
+
+                if (hasFace) {
                     try {
-                        lightCorrection = (faceAttributes != null) ? Double.valueOf(frameData.getLightCorrection()) : null;
-                    } catch (Exception e) {
-                        Log.d(TAG, "Error processing lightCorrection feature is not enabled", e);
-                    }
-                    isEyesOpen = (faceAttributes != null)
-                            ? (frameData.getEyesState().getIsOpenLeft() && frameData.getEyesState().getIsOpenRight())
-                            : null;
-                    faceShape = (faceAttributes != null)
-                            ? String.valueOf(frameData.getFaceShape())
-                            : null;
-                    frameColor = (faceAttributes != null)
-                            ? frameData.getGlassesFrameColor().toString()
-                            : null;
-                    eyeWear = (faceAttributes != null)
-                            ? String.valueOf(frameData.getFrxRecognitionResult().getFaces().get(0).getEyewear())
-                            : null;
-                } catch (Exception e) {
-                    Log.w(TAG, "Error processing frame data", e);
+                        faceAttributes = frameData.getFaceAttributes();
+                    } catch (java.lang.Exception e) {}
+
+                    try {
+                        lightCorrection = Double.valueOf(frameData.getLightCorrection());
+                    } catch (java.lang.Exception e) {}
+
+                    try {
+                        isEyesOpen = frameData.getEyesState().getIsOpenLeft() && frameData.getEyesState().getIsOpenRight();
+                    } catch (java.lang.Exception e) {}
+
+                    try {
+                        faceShape = String.valueOf(frameData.getFaceShape());
+                    } catch (java.lang.Exception e) {}
+
+                    try {
+                        frameColor= frameData.getGlassesFrameColor().toString();
+                    } catch (java.lang.Exception e) {}
                 }
 
                 try {
                     final JSONObject jsonObject = new JSONObject();
-                    if (hasFace != null) {
-                        jsonObject.put("hasFace", hasFace);
-                    }
+                    jsonObject.put("hasFace", hasFace);
+                    jsonObject.put("isEyesOpen", isEyesOpen);
                     if (faceAttributes != null) {
                         jsonObject.put("faceAttributesJson", faceAttributes);
                     }
                     if (lightCorrection != null) {
                         jsonObject.put("lightCorrection", lightCorrection);
-                    }
-                    if (isEyesOpen != null) {
-                        jsonObject.put("isEyesOpen", isEyesOpen);
                     }
                     if (faceShape != null) {
                         jsonObject.put("faceShape", faceShape);
