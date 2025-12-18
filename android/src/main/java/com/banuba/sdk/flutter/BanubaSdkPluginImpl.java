@@ -176,23 +176,43 @@ public class BanubaSdkPluginImpl {
                     return;
                 }
 
+                Boolean hasFace = null;
+                String faceAttributes = null;
+                Double lightCorrection = null;
+                Boolean isEyesOpen = null;
+                String faceShape = null;
+                String frameColor = null;
+                String eyeWear = null;
+
                 try {
-                    final String faceAttributes = frameData.getFaceAttributes();
-                    final Double lightCorrection = (faceAttributes != null) ? Double.valueOf(frameData.getLightCorrection()) : null;
-                    final Boolean isEyesOpen = (faceAttributes != null)
+                    faceAttributes = frameData.getFaceAttributes();
+                    hasFace = frameData.getFrxRecognitionResult().getFaces().get(0).hasFace();
+                    try {
+                        lightCorrection = (faceAttributes != null) ? Double.valueOf(frameData.getLightCorrection()) : null;
+                    } catch (Exception e) {
+                        Log.d(TAG, "Error processing lightCorrection feature is not enabled", e);
+                    }
+                    isEyesOpen = (faceAttributes != null)
                             ? (frameData.getEyesState().getIsOpenLeft() && frameData.getEyesState().getIsOpenRight())
                             : null;
-                    final String faceShape = (faceAttributes != null)
+                    faceShape = (faceAttributes != null)
                             ? String.valueOf(frameData.getFaceShape())
                             : null;
-                    final String frameColor = (faceAttributes != null)
+                    frameColor = (faceAttributes != null)
                             ? frameData.getGlassesFrameColor().toString()
                             : null;
-                    final String eyeWear = (faceAttributes != null)
+                    eyeWear = (faceAttributes != null)
                             ? String.valueOf(frameData.getFrxRecognitionResult().getFaces().get(0).getEyewear())
                             : null;
+                } catch (Exception e) {
+                    Log.w(TAG, "Error processing frame data", e);
+                }
 
+                try {
                     final JSONObject jsonObject = new JSONObject();
+                    if (hasFace != null) {
+                        jsonObject.put("hasFace", hasFace);
+                    }
                     if (faceAttributes != null) {
                         jsonObject.put("faceAttributesJson", faceAttributes);
                     }
@@ -227,7 +247,7 @@ public class BanubaSdkPluginImpl {
                         }
                     }));
                 } catch (Exception e) {
-                    Log.w(TAG, "Error processing frame data", e);
+                    Log.w(TAG, "Failed to parse the data", e);
                 }
             }
         };
