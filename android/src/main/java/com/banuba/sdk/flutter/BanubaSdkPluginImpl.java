@@ -183,6 +183,7 @@ public class BanubaSdkPluginImpl {
                 String faceShape = null;
                 String frameColor = null;
                 String eyeWear = null;
+                String faceRect = null;
 
                 try {
                     hasFace = frameData.getFrxRecognitionResult().getFaces().get(0).hasFace();
@@ -192,6 +193,10 @@ public class BanubaSdkPluginImpl {
                 if (hasFace) {
                     try {
                         faceAttributes = frameData.getFaceAttributes();
+                    } catch (java.lang.Exception e) {}
+
+                    try {
+                        faceRect = frameData.getFrxRecognitionResult().getFaces().get(0).getFaceRect().toString();
                     } catch (java.lang.Exception e) {}
 
                     try {
@@ -215,6 +220,9 @@ public class BanubaSdkPluginImpl {
                     final JSONObject jsonObject = new JSONObject();
                     jsonObject.put("hasFace", hasFace);
                     jsonObject.put("isEyesOpen", isEyesOpen);
+                    if (faceRect != null) {
+                        jsonObject.put("faceRect", faceRect);
+                    }
                     if (faceAttributes != null) {
                         jsonObject.put("faceAttributesJson", faceAttributes);
                     }
