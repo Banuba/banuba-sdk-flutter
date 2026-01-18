@@ -19,6 +19,7 @@ import androidx.annotation.NonNull;
 import com.banuba.sdk.camera.Facing;
 import com.banuba.sdk.effect_player.CameraOrientation;
 import com.banuba.sdk.effect_player.Effect;
+import com.banuba.sdk.effect_player.EffectActivationCompletionListener;
 import com.banuba.sdk.effect_player.FrameDataListener;
 import com.banuba.sdk.entity.ContentRatioParams;
 import com.banuba.sdk.entity.RecordedVideoInfo;
@@ -55,6 +56,7 @@ public class BanubaSdkPluginImpl {
         private final Context mContext;
         private final Handler mMainHandler = new Handler(Looper.getMainLooper());
         private BanubaSdkPluginGen.FrameDataFlutterApi mFramesApi;
+        private BanubaSdkPluginGen.EffectActivationCompletionFlutterApi mEffectActivationCompletionApi;
         private BanubaSdkManager mSdkManager;
 
         private BanubaSdkPluginGen.VoidResult mTakePhotoCallback;
@@ -169,6 +171,31 @@ public class BanubaSdkPluginImpl {
             }
         };
 
+        private final EffectActivationCompletionListener mEffectActivationCompletionListener = new EffectActivationCompletionListener() {
+            @Override
+            public void onEffectActivationFinished(@NonNull String url) {
+                if (mEffectActivationCompletionApi == null) {
+                    return;
+                }
+
+                Log.d(TAG, "Effect activation finished: " + url);
+
+                final BanubaSdkPluginGen.EffectActivationCompletionDto dto = new BanubaSdkPluginGen.EffectActivationCompletionDto.Builder()
+                        .setEffectUrl(url)
+                        .build();
+
+                mMainHandler.post(() -> mEffectActivationCompletionApi.onEffectActivationFinished(dto, new BanubaSdkPluginGen.VoidResult() {
+                    @Override
+                    public void success() {}
+
+                    @Override
+                    public void error(@NonNull Throwable error) {
+                        Log.w(TAG, "Failed to send onEffectActivationFinished via Pigeon", error);
+                    }
+                }));
+            }
+        };
+
         private final FrameDataListener mFrameDataListener = new FrameDataListener() {
             @Override
             public void onFrameDataProcessed(FrameData frameData) {
@@ -262,6 +289,7 @@ public class BanubaSdkPluginImpl {
         public BanubaSdkManagerIml(@NonNull Context context, @NonNull io.flutter.plugin.common.BinaryMessenger messenger) {
             mContext = context;
             mFramesApi = new BanubaSdkPluginGen.FrameDataFlutterApi(messenger);
+            mEffectActivationCompletionApi = new BanubaSdkPluginGen.EffectActivationCompletionFlutterApi(messenger);
         }
 
         public void setActivity(Activity activity) {
@@ -630,6 +658,20 @@ public class BanubaSdkPluginImpl {
         public void removeFrameDataListener(@NonNull BanubaSdkPluginGen.VoidResult result) {
             Log.d(TAG, "removeFrameDataListener");
             getSdkManager().getEffectPlayer().removeFrameDataListener(mFrameDataListener);
+            result.success();
+        }
+
+        @Override
+        public void addEffectActivationCompletionListener(@NonNull BanubaSdkPluginGen.VoidResult result) {
+            Log.d(TAG, "addEffectActivationCompletionListener");
+            getSdkManager().getEffectPlayer().addEffectActivationCompletionListener(mEffectActivationCompletionListener);
+            result.success();
+        }
+
+        @Override
+        public void removeEffectActivationCompletionListener(@NonNull BanubaSdkPluginGen.VoidResult result) {
+            Log.d(TAG, "removeEffectActivationCompletionListener");
+            getSdkManager().getEffectPlayer().removeEffectActivationCompletionListener(mEffectActivationCompletionListener);
             result.success();
         }
 

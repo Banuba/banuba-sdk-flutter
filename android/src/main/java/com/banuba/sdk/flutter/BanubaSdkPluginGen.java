@@ -142,6 +142,62 @@ public class BanubaSdkPluginGen {
     }
   }
 
+  public static final class EffectActivationCompletionDto {
+    private @Nullable String effectUrl;
+
+    public @Nullable String getEffectUrl() {
+      return effectUrl;
+    }
+
+    public void setEffectUrl(@Nullable String setterArg) {
+      this.effectUrl = setterArg;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) { return true; }
+      if (o == null || getClass() != o.getClass()) { return false; }
+      EffectActivationCompletionDto that = (EffectActivationCompletionDto) o;
+      return Objects.equals(effectUrl, that.effectUrl);
+    }
+
+    @Override
+    public int hashCode() {
+      return Objects.hash(effectUrl);
+    }
+
+    public static final class Builder {
+
+      private @Nullable String effectUrl;
+
+      @CanIgnoreReturnValue
+      public @NonNull Builder setEffectUrl(@Nullable String setterArg) {
+        this.effectUrl = setterArg;
+        return this;
+      }
+
+      public @NonNull EffectActivationCompletionDto build() {
+        EffectActivationCompletionDto pigeonReturn = new EffectActivationCompletionDto();
+        pigeonReturn.setEffectUrl(effectUrl);
+        return pigeonReturn;
+      }
+    }
+
+    @NonNull
+    ArrayList<Object> toList() {
+      ArrayList<Object> toListResult = new ArrayList<>(1);
+      toListResult.add(effectUrl);
+      return toListResult;
+    }
+
+    static @NonNull EffectActivationCompletionDto fromList(@NonNull ArrayList<Object> pigeonVar_list) {
+      EffectActivationCompletionDto pigeonResult = new EffectActivationCompletionDto();
+      Object effectUrl = pigeonVar_list.get(0);
+      pigeonResult.setEffectUrl((String) effectUrl);
+      return pigeonResult;
+    }
+  }
+
   private static class PigeonCodec extends StandardMessageCodec {
     public static final PigeonCodec INSTANCE = new PigeonCodec();
 
@@ -156,6 +212,8 @@ public class BanubaSdkPluginGen {
         }
         case (byte) 130:
           return FrameDataDto.fromList((ArrayList<Object>) readValue(buffer));
+        case (byte) 131:
+          return EffectActivationCompletionDto.fromList((ArrayList<Object>) readValue(buffer));
         default:
           return super.readValueOfType(type, buffer);
       }
@@ -169,6 +227,9 @@ public class BanubaSdkPluginGen {
       } else if (value instanceof FrameDataDto) {
         stream.write(130);
         writeValue(stream, ((FrameDataDto) value).toList());
+      } else if (value instanceof EffectActivationCompletionDto) {
+        stream.write(131);
+        writeValue(stream, ((EffectActivationCompletionDto) value).toList());
       } else {
         super.writeValue(stream, value);
       }
@@ -275,6 +336,10 @@ public class BanubaSdkPluginGen {
     void addFrameDataListener(@NonNull VoidResult result);
     /** Removes FrameDataListener from EffectPlayer (Android) */
     void removeFrameDataListener(@NonNull VoidResult result);
+    /** Adds EffectActivationCompletionListener to EffectPlayer */
+    void addEffectActivationCompletionListener(@NonNull VoidResult result);
+    /** Removes EffectActivationCompletionListener from EffectPlayer */
+    void removeEffectActivationCompletionListener(@NonNull VoidResult result);
 
     /** The codec used by BanubaSdkManager. */
     static @NonNull MessageCodec<Object> getCodec() {
@@ -890,6 +955,60 @@ public class BanubaSdkPluginGen {
           channel.setMessageHandler(null);
         }
       }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.addEffectActivationCompletionListener" + messageChannelSuffix, getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<>();
+                VoidResult resultCallback =
+                    new VoidResult() {
+                      public void success() {
+                        wrapped.add(0, null);
+                        reply.reply(wrapped);
+                      }
+
+                      public void error(Throwable error) {
+                        ArrayList<Object> wrappedError = wrapError(error);
+                        reply.reply(wrappedError);
+                      }
+                    };
+
+                api.addEffectActivationCompletionListener(resultCallback);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.removeEffectActivationCompletionListener" + messageChannelSuffix, getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<>();
+                VoidResult resultCallback =
+                    new VoidResult() {
+                      public void success() {
+                        wrapped.add(0, null);
+                        reply.reply(wrapped);
+                      }
+
+                      public void error(Throwable error) {
+                        ArrayList<Object> wrappedError = wrapError(error);
+                        reply.reply(wrappedError);
+                      }
+                    };
+
+                api.removeEffectActivationCompletionListener(resultCallback);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
     }
   }
   /** Generated class from Pigeon that represents Flutter messages that can be called from Java. */
@@ -914,6 +1033,47 @@ public class BanubaSdkPluginGen {
     }
     public void onFrame(@NonNull FrameDataDto dataArg, @NonNull VoidResult result) {
       final String channelName = "dev.flutter.pigeon.banuba_sdk.FrameDataFlutterApi.onFrame" + messageChannelSuffix;
+      BasicMessageChannel<Object> channel =
+          new BasicMessageChannel<>(
+              binaryMessenger, channelName, getCodec());
+      channel.send(
+          new ArrayList<>(Collections.singletonList(dataArg)),
+          channelReply -> {
+            if (channelReply instanceof List) {
+              List<Object> listReply = (List<Object>) channelReply;
+              if (listReply.size() > 1) {
+                result.error(new FlutterError((String) listReply.get(0), (String) listReply.get(1), listReply.get(2)));
+              } else {
+                result.success();
+              }
+            }  else {
+              result.error(createConnectionError(channelName));
+            } 
+          });
+    }
+  }
+  /** Generated class from Pigeon that represents Flutter messages that can be called from Java. */
+  public static class EffectActivationCompletionFlutterApi {
+    private final @NonNull BinaryMessenger binaryMessenger;
+    private final String messageChannelSuffix;
+
+    public EffectActivationCompletionFlutterApi(@NonNull BinaryMessenger argBinaryMessenger) {
+      this(argBinaryMessenger, "");
+    }
+    public EffectActivationCompletionFlutterApi(@NonNull BinaryMessenger argBinaryMessenger, @NonNull String messageChannelSuffix) {
+      this.binaryMessenger = argBinaryMessenger;
+      this.messageChannelSuffix = messageChannelSuffix.isEmpty() ? "" : "." + messageChannelSuffix;
+    }
+
+    /**
+     * Public interface for sending reply.
+     * The codec used by EffectActivationCompletionFlutterApi.
+     */
+    static @NonNull MessageCodec<Object> getCodec() {
+      return PigeonCodec.INSTANCE;
+    }
+    public void onEffectActivationFinished(@NonNull EffectActivationCompletionDto dataArg, @NonNull VoidResult result) {
+      final String channelName = "dev.flutter.pigeon.banuba_sdk.EffectActivationCompletionFlutterApi.onEffectActivationFinished" + messageChannelSuffix;
       BasicMessageChannel<Object> channel =
           new BasicMessageChannel<>(
               binaryMessenger, channelName, getCodec());

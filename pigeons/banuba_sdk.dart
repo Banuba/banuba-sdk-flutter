@@ -102,6 +102,14 @@ abstract class BanubaSdkManager {
   /// Removes FrameDataListener from EffectPlayer (Android)
   @async
   void removeFrameDataListener();
+
+  /// Adds EffectActivationCompletionListener to EffectPlayer (Android)
+  @async
+  void addEffectActivationCompletionListener();
+
+  /// Removes EffectActivationCompletionListener from EffectPlayer (Android)
+  @async
+  void removeEffectActivationCompletionListener();
 }
 
 class FrameDataDto {
@@ -111,4 +119,13 @@ class FrameDataDto {
 @FlutterApi()
 abstract class FrameDataFlutterApi {
   void onFrame(FrameDataDto data);
+}
+
+class EffectActivationCompletionDto {
+  String? effectUrl;
+}
+
+@FlutterApi()
+abstract class EffectActivationCompletionFlutterApi {
+  void onEffectActivationFinished(EffectActivationCompletionDto data);
 }

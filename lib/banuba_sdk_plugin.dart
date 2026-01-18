@@ -53,6 +53,27 @@ class FrameDataDto {
   }
 }
 
+class EffectActivationCompletionDto {
+  EffectActivationCompletionDto({
+    this.effectUrl,
+  });
+
+  String? effectUrl;
+
+  Object encode() {
+    return <Object?>[
+      effectUrl,
+    ];
+  }
+
+  static EffectActivationCompletionDto decode(Object result) {
+    result as List<Object?>;
+    return EffectActivationCompletionDto(
+      effectUrl: result[0] as String?,
+    );
+  }
+}
+
 
 class _PigeonCodec extends StandardMessageCodec {
   const _PigeonCodec();
@@ -67,6 +88,9 @@ class _PigeonCodec extends StandardMessageCodec {
     }    else if (value is FrameDataDto) {
       buffer.putUint8(130);
       writeValue(buffer, value.encode());
+    }    else if (value is EffectActivationCompletionDto) {
+      buffer.putUint8(131);
+      writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
     }
@@ -80,6 +104,8 @@ class _PigeonCodec extends StandardMessageCodec {
         return value == null ? null : SeverityLevel.values[value];
       case 130: 
         return FrameDataDto.decode(readValue(buffer)!);
+      case 131: 
+        return EffectActivationCompletionDto.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
     }
@@ -683,6 +709,52 @@ class BanubaSdkManager {
       return;
     }
   }
+
+  /// Adds EffectActivationCompletionListener to EffectPlayer
+  Future<void> addEffectActivationCompletionListener() async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.addEffectActivationCompletionListener$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_channel.send(null) as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  /// Removes EffectActivationCompletionListener from EffectPlayer
+  Future<void> removeEffectActivationCompletionListener() async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.removeEffectActivationCompletionListener$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_channel.send(null) as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
 }
 
 abstract class FrameDataFlutterApi {
@@ -708,6 +780,41 @@ abstract class FrameDataFlutterApi {
               'Argument for dev.flutter.pigeon.banuba_sdk.FrameDataFlutterApi.onFrame was null, expected non-null FrameDataDto.');
           try {
             api.onFrame(arg_data!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+  }
+}
+
+abstract class EffectActivationCompletionFlutterApi {
+  static const MessageCodec<Object?> pigeonChannelCodec = _PigeonCodec();
+
+  void onEffectActivationFinished(EffectActivationCompletionDto data);
+
+  static void setUp(EffectActivationCompletionFlutterApi? api, {BinaryMessenger? binaryMessenger, String messageChannelSuffix = '',}) {
+    messageChannelSuffix = messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.banuba_sdk.EffectActivationCompletionFlutterApi.onEffectActivationFinished$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        pigeonVar_channel.setMessageHandler(null);
+      } else {
+        pigeonVar_channel.setMessageHandler((Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.banuba_sdk.EffectActivationCompletionFlutterApi.onEffectActivationFinished was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final EffectActivationCompletionDto? arg_data = (args[0] as EffectActivationCompletionDto?);
+          assert(arg_data != null,
+              'Argument for dev.flutter.pigeon.banuba_sdk.EffectActivationCompletionFlutterApi.onEffectActivationFinished was null, expected non-null EffectActivationCompletionDto.');
+          try {
+            api.onEffectActivationFinished(arg_data!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
