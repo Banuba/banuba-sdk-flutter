@@ -86,6 +86,94 @@ public class BanubaSdkPluginGen {
   }
 
   /** Generated class from Pigeon that represents data sent in messages. */
+  public static final class SizeDto {
+    private @NonNull Long width;
+
+    public @NonNull Long getWidth() {
+      return width;
+    }
+
+    public void setWidth(@NonNull Long setterArg) {
+      if (setterArg == null) {
+        throw new IllegalStateException("Nonnull field \"width\" is null.");
+      }
+      this.width = setterArg;
+    }
+
+    private @NonNull Long height;
+
+    public @NonNull Long getHeight() {
+      return height;
+    }
+
+    public void setHeight(@NonNull Long setterArg) {
+      if (setterArg == null) {
+        throw new IllegalStateException("Nonnull field \"height\" is null.");
+      }
+      this.height = setterArg;
+    }
+
+    /** Constructor is non-public to enforce null safety; use Builder. */
+    SizeDto() {}
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) { return true; }
+      if (o == null || getClass() != o.getClass()) { return false; }
+      SizeDto that = (SizeDto) o;
+      return width.equals(that.width) && height.equals(that.height);
+    }
+
+    @Override
+    public int hashCode() {
+      return Objects.hash(width, height);
+    }
+
+    public static final class Builder {
+
+      private @Nullable Long width;
+
+      @CanIgnoreReturnValue
+      public @NonNull Builder setWidth(@NonNull Long setterArg) {
+        this.width = setterArg;
+        return this;
+      }
+
+      private @Nullable Long height;
+
+      @CanIgnoreReturnValue
+      public @NonNull Builder setHeight(@NonNull Long setterArg) {
+        this.height = setterArg;
+        return this;
+      }
+
+      public @NonNull SizeDto build() {
+        SizeDto pigeonReturn = new SizeDto();
+        pigeonReturn.setWidth(width);
+        pigeonReturn.setHeight(height);
+        return pigeonReturn;
+      }
+    }
+
+    @NonNull
+    ArrayList<Object> toList() {
+      ArrayList<Object> toListResult = new ArrayList<>(2);
+      toListResult.add(width);
+      toListResult.add(height);
+      return toListResult;
+    }
+
+    static @NonNull SizeDto fromList(@NonNull ArrayList<Object> pigeonVar_list) {
+      SizeDto pigeonResult = new SizeDto();
+      Object width = pigeonVar_list.get(0);
+      pigeonResult.setWidth((Long) width);
+      Object height = pigeonVar_list.get(1);
+      pigeonResult.setHeight((Long) height);
+      return pigeonResult;
+    }
+  }
+
+  /** Generated class from Pigeon that represents data sent in messages. */
   public static final class FrameDataDto {
     private @Nullable String frameDataJson;
 
@@ -142,6 +230,7 @@ public class BanubaSdkPluginGen {
     }
   }
 
+  /** Generated class from Pigeon that represents data sent in messages. */
   public static final class EffectActivationCompletionDto {
     private @Nullable String effectUrl;
 
@@ -211,8 +300,10 @@ public class BanubaSdkPluginGen {
           return value == null ? null : SeverityLevel.values()[((Long) value).intValue()];
         }
         case (byte) 130:
-          return FrameDataDto.fromList((ArrayList<Object>) readValue(buffer));
+          return SizeDto.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 131:
+          return FrameDataDto.fromList((ArrayList<Object>) readValue(buffer));
+        case (byte) 132:
           return EffectActivationCompletionDto.fromList((ArrayList<Object>) readValue(buffer));
         default:
           return super.readValueOfType(type, buffer);
@@ -224,11 +315,14 @@ public class BanubaSdkPluginGen {
       if (value instanceof SeverityLevel) {
         stream.write(129);
         writeValue(stream, value == null ? null : ((SeverityLevel) value).index);
-      } else if (value instanceof FrameDataDto) {
+      } else if (value instanceof SizeDto) {
         stream.write(130);
+        writeValue(stream, ((SizeDto) value).toList());
+      } else if (value instanceof FrameDataDto) {
+        stream.write(131);
         writeValue(stream, ((FrameDataDto) value).toList());
       } else if (value instanceof EffectActivationCompletionDto) {
-        stream.write(131);
+        stream.write(132);
         writeValue(stream, ((EffectActivationCompletionDto) value).toList());
       } else {
         super.writeValue(stream, value);
@@ -336,10 +430,12 @@ public class BanubaSdkPluginGen {
     void addFrameDataListener(@NonNull VoidResult result);
     /** Removes FrameDataListener from EffectPlayer (Android) */
     void removeFrameDataListener(@NonNull VoidResult result);
-    /** Adds EffectActivationCompletionListener to EffectPlayer */
+    /** Adds EffectActivationCompletionListener to EffectPlayer (Android) */
     void addEffectActivationCompletionListener(@NonNull VoidResult result);
-    /** Removes EffectActivationCompletionListener from EffectPlayer */
+    /** Removes EffectActivationCompletionListener from EffectPlayer (Android) */
     void removeEffectActivationCompletionListener(@NonNull VoidResult result);
+    /** Gets effect size from EffectManager */
+    void getEffectSize(@NonNull NullableResult<SizeDto> result);
 
     /** The codec used by BanubaSdkManager. */
     static @NonNull MessageCodec<Object> getCodec() {
@@ -1004,6 +1100,33 @@ public class BanubaSdkPluginGen {
                     };
 
                 api.removeEffectActivationCompletionListener(resultCallback);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.getEffectSize" + messageChannelSuffix, getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<>();
+                NullableResult<SizeDto> resultCallback =
+                    new NullableResult<SizeDto>() {
+                      public void success(SizeDto result) {
+                        wrapped.add(0, result);
+                        reply.reply(wrapped);
+                      }
+
+                      public void error(Throwable error) {
+                        ArrayList<Object> wrappedError = wrapError(error);
+                        reply.reply(wrappedError);
+                      }
+                    };
+
+                api.getEffectSize(resultCallback);
               });
         } else {
           channel.setMessageHandler(null);

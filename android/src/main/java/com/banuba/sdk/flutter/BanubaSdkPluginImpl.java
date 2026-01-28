@@ -692,6 +692,28 @@ public class BanubaSdkPluginImpl {
             getSdkManager().setFlashlightEnabled(enabled);
         }
 
+        @Override
+        public void getEffectSize(@NonNull BanubaSdkPluginGen.NullableResult<BanubaSdkPluginGen.SizeDto> result) {
+            try {
+                com.banuba.sdk.types.Size size = getSdkManager().getEffectManager().effectSize();
+                if (size == null) {
+                    Log.e(TAG, "Effect size is null");
+                    result.success(null);
+                    return;
+                }
+
+                BanubaSdkPluginGen.SizeDto sizeDto = new BanubaSdkPluginGen.SizeDto.Builder()
+                        .setWidth((long) size.getWidth())
+                        .setHeight((long) size.getHeight())
+                        .build();
+
+                result.success(sizeDto);
+            } catch (Exception e) {
+                Log.e(TAG, "Error getting effect size: " + e.getMessage(), e);
+                result.error(e);
+            }
+        }
+
         private BanubaSdkManager getSdkManager() {
             if (mSdkManager == null) {
                 mSdkManager = new BanubaSdkManager(mContext.getApplicationContext());

@@ -1,3 +1,4 @@
+import 'package:banuba_sdk/banuba_sdk_plugin.dart';
 import 'package:pigeon/pigeon.dart';
 
 enum SeverityLevel {
@@ -110,6 +111,10 @@ abstract class BanubaSdkManager {
   /// Removes EffectActivationCompletionListener from EffectPlayer (Android)
   @async
   void removeEffectActivationCompletionListener();
+
+  /// Gets effect size from EffectManager
+  @async
+  SizeDto? getEffectSize();
 }
 
 class FrameDataDto {

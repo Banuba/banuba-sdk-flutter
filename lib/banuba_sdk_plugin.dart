@@ -32,6 +32,31 @@ enum SeverityLevel {
   error,
 }
 
+class SizeDto {
+  int width;
+  int height;
+
+  SizeDto({
+    required this.width,
+    required this.height,
+  });
+
+  Object encode() {
+    return <Object?>[
+      width,
+      height,
+    ];
+  }
+
+  static SizeDto decode(Object result) {
+    result as List<Object?>;
+    return SizeDto(
+      width: result[0]! as int,
+      height: result[1]! as int,
+    );
+  }
+}
+
 class FrameDataDto {
   FrameDataDto({
     this.frameDataJson,
@@ -85,11 +110,14 @@ class _PigeonCodec extends StandardMessageCodec {
     }    else if (value is SeverityLevel) {
       buffer.putUint8(129);
       writeValue(buffer, value.index);
-    }    else if (value is FrameDataDto) {
+    }    else if (value is SizeDto) {
       buffer.putUint8(130);
       writeValue(buffer, value.encode());
-    }    else if (value is EffectActivationCompletionDto) {
+    }    else if (value is FrameDataDto) {
       buffer.putUint8(131);
+      writeValue(buffer, value.encode());
+    }    else if (value is EffectActivationCompletionDto) {
+      buffer.putUint8(132);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -103,8 +131,10 @@ class _PigeonCodec extends StandardMessageCodec {
         final int? value = readValue(buffer) as int?;
         return value == null ? null : SeverityLevel.values[value];
       case 130: 
-        return FrameDataDto.decode(readValue(buffer)!);
+        return SizeDto.decode(readValue(buffer)!);
       case 131: 
+        return FrameDataDto.decode(readValue(buffer)!);
+      case 132: 
         return EffectActivationCompletionDto.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -710,7 +740,7 @@ class BanubaSdkManager {
     }
   }
 
-  /// Adds EffectActivationCompletionListener to EffectPlayer
+  /// Adds EffectActivationCompletionListener to EffectPlayer (Android)
   Future<void> addEffectActivationCompletionListener() async {
     final String pigeonVar_channelName = 'dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.addEffectActivationCompletionListener$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
@@ -733,7 +763,7 @@ class BanubaSdkManager {
     }
   }
 
-  /// Removes EffectActivationCompletionListener from EffectPlayer
+  /// Removes EffectActivationCompletionListener from EffectPlayer (Android)
   Future<void> removeEffectActivationCompletionListener() async {
     final String pigeonVar_channelName = 'dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.removeEffectActivationCompletionListener$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
@@ -753,6 +783,29 @@ class BanubaSdkManager {
       );
     } else {
       return;
+    }
+  }
+
+  /// Gets effect size from EffectManager
+  Future<SizeDto?> getEffectSize() async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.getEffectSize$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_channel.send(null) as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return (pigeonVar_replyList[0] as SizeDto?);
     }
   }
 }
