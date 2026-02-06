@@ -25,6 +25,7 @@ import com.banuba.sdk.entity.ContentRatioParams;
 import com.banuba.sdk.entity.RecordedVideoInfo;
 import com.banuba.sdk.manager.BanubaSdkManager;
 import com.banuba.sdk.manager.BanubaSdkTouchListener;
+import com.banuba.sdk.manager.IResolutionController;
 import com.banuba.sdk.manager.IEventCallback;
 import com.banuba.sdk.types.Data;
 import com.banuba.sdk.types.FrameData;
@@ -725,10 +726,22 @@ public class BanubaSdkPluginImpl {
 
         private BanubaSdkManager getSdkManager() {
             if (mSdkManager == null) {
-                mSdkManager = new BanubaSdkManager(mContext.getApplicationContext());
+                IResolutionController resolutionController = new ResolutionController();
+                mSdkManager = new BanubaSdkManager(mContext.getApplicationContext(), resolutionController);
                 mSdkManager.setCallback(mCallback);
             }
             return mSdkManager;
+        }
+
+        private static final class ResolutionController implements IResolutionController {
+            @NonNull
+            @Override
+            public Size getSize(@NonNull Size size) {
+                if (size.getWidth() > size.getHeight()) {
+                    return new Size(size.getHeight(), size.getWidth());
+                }
+                return new Size(size.getWidth(), size.getHeight());
+            }
         }
 
         private boolean allPermissionsGranted() {
