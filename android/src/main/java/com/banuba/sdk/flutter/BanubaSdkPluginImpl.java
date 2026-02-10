@@ -565,11 +565,6 @@ public class BanubaSdkPluginImpl {
 
                 Data processed = null;
                 try {
-                    processed = getSdkManager().getEffectPlayer().processImage(
-                            image,
-                            PixelFormat.RGBA
-                    );
-
                     final int width;
                     final int height;
                     final CameraOrientation cameraOrientation =
@@ -586,7 +581,23 @@ public class BanubaSdkPluginImpl {
                         height = size.getHeight();
                     }
 
+                    getSdkManager().getEffectPlayer().startVideoProcessing(width, height, cameraOrientation, false, true);
+
+                    int recognizerIterations = 8;
+
+                    final FrameData processedFrame = getSdkManager().getEffectPlayer().processVideoFrame(
+                            image,
+                            recognizerIterations
+                    );
+
+                    processed = getSdkManager().getEffectPlayer().drawVideoFrame(
+                            processedFrame,
+                            0,
+                            PixelFormat.RGBA
+                    );
+
                     final Bitmap result = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+
                     result.copyPixelsFromBuffer(processed.getData());
 
                     Log.d(TAG, "Time to process image = "
@@ -594,6 +605,7 @@ public class BanubaSdkPluginImpl {
                     return result;
 
                 } finally {
+                    getSdkManager().getEffectPlayer().stopVideoProcessing(false);
                     if (processed != null) {
                         processed.close();
                     }
