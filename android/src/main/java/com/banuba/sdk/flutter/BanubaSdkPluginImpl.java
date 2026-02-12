@@ -583,7 +583,7 @@ public class BanubaSdkPluginImpl {
 
                     getSdkManager().getEffectPlayer().startVideoProcessing(width, height, cameraOrientation, false, true);
 
-                    int recognizerIterations = 8;
+                    int recognizerIterations = 10;
 
                     final FrameData processedFrame = getSdkManager().getEffectPlayer().processVideoFrame(
                             image,
