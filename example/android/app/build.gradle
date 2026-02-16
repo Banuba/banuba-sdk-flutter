@@ -44,6 +44,12 @@ android {
         ndk {
             abiFilters 'armeabi-v7a', 'arm64-v8a'
         }
+
+        buildFeatures {
+            buildConfig true
+        }
+
+        buildConfigField "boolean", "ENABLE_FAR_EXPERIMENTAL", "${ENABLE_FAR_EXPERIMENTAL}"
     }
 
     buildTypes {
@@ -65,8 +71,12 @@ android {
 }
 
 dependencies {
-    implementation "com.banuba.sdk:face_tracker:$project.bnb_sdk_version"
-    implementation "com.banuba.sdk:background:$project.bnb_sdk_version"
+    if (ENABLE_FAR_EXPERIMENTAL) {
+        implementation "com.bnbtest.sdk:banuba_sdk:$project.bnb_sdk_version"
+    } else {
+        implementation "com.banuba.sdk:banuba_sdk:$project.bnb_sdk_version"
+    }
+
 }
 
 flutter {

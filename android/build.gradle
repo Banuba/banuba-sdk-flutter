@@ -12,23 +12,16 @@ buildscript {
     }
 }
 
-rootProject.allprojects {
-    repositories {
-        google()
-        mavenCentral()
-
-        maven {
-            name = "nexus"
-            url = uri("https://nexus.banuba.net/repository/maven-snapshots")
-        }
-    }
-}
-
 apply plugin: 'com.android.library'
+
+def ENABLE_FAR_EXPERIMENTAL = (project.findProperty("ENABLE_FAR_EXPERIMENTAL") ?: "false").toString().toBoolean()
 
 android {
     namespace "com.banuba.sdk.flutter.banuba_sdk"
     compileSdkVersion 31
+    buildFeatures {
+        buildConfig true
+    }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -37,10 +30,33 @@ android {
 
     defaultConfig {
         minSdkVersion 21
+        buildConfigField "boolean", "ENABLE_FAR_EXPERIMENTAL", "${ENABLE_FAR_EXPERIMENTAL}"
+    }
+}
+
+rootProject.allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        if (ENABLE_FAR_EXPERIMENTAL) {
+            maven {
+                name = "nexus"
+                url = uri("https://nexus.banuba.net/repository/maven-snapshots")
+            }
+        } else {
+            maven {
+                name = "nexus"
+                url = uri("https://nexus.banuba.net/repository/maven-releases")
+            }
+        }
     }
 }
 
 dependencies {
     // Banuba SDK dependencies
-    implementation "com.bnbtest.sdk:sdk_api:$project.bnb_sdk_version"
+    if (ENABLE_FAR_EXPERIMENTAL) {
+        implementation "com.bnbtest.sdk:sdk_api:$project.bnb_sdk_version"
+    } else {
+        implementation "com.banuba.sdk:sdk_api:$project.bnb_sdk_version"
+    }
 }
