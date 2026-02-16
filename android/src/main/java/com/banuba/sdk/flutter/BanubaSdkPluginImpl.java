@@ -277,12 +277,7 @@ public class BanubaSdkPluginImpl {
                     }
 
                     final String frameDataJson = jsonObject.toString();
-
-                    final BanubaSdkPluginGen.FrameDataDto dto = new BanubaSdkPluginGen.FrameDataDto.Builder()
-                            .setFrameDataJson(frameDataJson)
-                            .build();
-
-                    mMainHandler.post(() -> mFramesApi.onFrame(dto, new BanubaSdkPluginGen.VoidResult() {
+                    mMainHandler.post(() -> mFramesApi.onFrame(frameDataJson, new BanubaSdkPluginGen.VoidResult() {
                         @Override public void success() {}
 
                         @Override
@@ -554,7 +549,7 @@ public class BanubaSdkPluginImpl {
         ) {
             final File destFile = new File(destFilePath);
 
-            Log.w(TAG, "DEPTECATED! processImage: dest file exists = " + new File(sourceFilePath).exists());
+            Log.w(TAG, "processImage: dest file exists = " + new File(sourceFilePath).exists());
 
             final Callable<Bitmap> callable = () -> {
                 final long start = System.currentTimeMillis();

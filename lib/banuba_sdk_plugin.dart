@@ -33,13 +33,14 @@ enum SeverityLevel {
 }
 
 class SizeDto {
-  int width;
-  int height;
-
   SizeDto({
-    required this.width,
-    required this.height,
+    this.width,
+    this.height,
   });
+
+  int? width;
+
+  int? height;
 
   Object encode() {
     return <Object?>[
@@ -51,29 +52,8 @@ class SizeDto {
   static SizeDto decode(Object result) {
     result as List<Object?>;
     return SizeDto(
-      width: result[0]! as int,
-      height: result[1]! as int,
-    );
-  }
-}
-
-class FrameDataDto {
-  FrameDataDto({
-    this.frameDataJson,
-  });
-
-  String? frameDataJson;
-
-  Object encode() {
-    return <Object?>[
-      frameDataJson,
-    ];
-  }
-
-  static FrameDataDto decode(Object result) {
-    result as List<Object?>;
-    return FrameDataDto(
-      frameDataJson: result[0] as String?,
+      width: result[0] as int?,
+      height: result[1] as int?,
     );
   }
 }
@@ -113,11 +93,8 @@ class _PigeonCodec extends StandardMessageCodec {
     }    else if (value is SizeDto) {
       buffer.putUint8(130);
       writeValue(buffer, value.encode());
-    }    else if (value is FrameDataDto) {
-      buffer.putUint8(131);
-      writeValue(buffer, value.encode());
     }    else if (value is EffectActivationCompletionDto) {
-      buffer.putUint8(132);
+      buffer.putUint8(131);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -133,8 +110,6 @@ class _PigeonCodec extends StandardMessageCodec {
       case 130: 
         return SizeDto.decode(readValue(buffer)!);
       case 131: 
-        return FrameDataDto.decode(readValue(buffer)!);
-      case 132: 
         return EffectActivationCompletionDto.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -813,7 +788,7 @@ class BanubaSdkManager {
 abstract class FrameDataFlutterApi {
   static const MessageCodec<Object?> pigeonChannelCodec = _PigeonCodec();
 
-  void onFrame(FrameDataDto data);
+  void onFrame(String data);
 
   static void setUp(FrameDataFlutterApi? api, {BinaryMessenger? binaryMessenger, String messageChannelSuffix = '',}) {
     messageChannelSuffix = messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
@@ -828,9 +803,9 @@ abstract class FrameDataFlutterApi {
           assert(message != null,
           'Argument for dev.flutter.pigeon.banuba_sdk.FrameDataFlutterApi.onFrame was null.');
           final List<Object?> args = (message as List<Object?>?)!;
-          final FrameDataDto? arg_data = (args[0] as FrameDataDto?);
+          final String? arg_data = (args[0] as String?);
           assert(arg_data != null,
-              'Argument for dev.flutter.pigeon.banuba_sdk.FrameDataFlutterApi.onFrame was null, expected non-null FrameDataDto.');
+              'Argument for dev.flutter.pigeon.banuba_sdk.FrameDataFlutterApi.onFrame was null, expected non-null String.');
           try {
             api.onFrame(arg_data!);
             return wrapResponse(empty: true);

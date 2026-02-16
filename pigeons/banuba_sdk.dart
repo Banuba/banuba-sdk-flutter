@@ -1,4 +1,3 @@
-import 'package:banuba_sdk/banuba_sdk_plugin.dart';
 import 'package:pigeon/pigeon.dart';
 
 enum SeverityLevel {
@@ -6,6 +5,11 @@ enum SeverityLevel {
   info,
   warning,
   error,
+}
+
+class SizeDto {
+  int? width;
+  int? height;
 }
 
 /// An entry point to Banuba SDK
@@ -117,13 +121,9 @@ abstract class BanubaSdkManager {
   SizeDto? getEffectSize();
 }
 
-class FrameDataDto {
-  String? frameDataJson;
-}
-
 @FlutterApi()
 abstract class FrameDataFlutterApi {
-  void onFrame(FrameDataDto data);
+  void onFrame(String data);
 }
 
 class EffectActivationCompletionDto {

@@ -7,13 +7,13 @@ class FrameStream extends FrameDataFlutterApi {
     FrameDataFlutterApi.setUp(this);
   }
 
-  final StreamController<FrameDataDto> _controller =
-      StreamController<FrameDataDto>.broadcast();
+  final StreamController<String> _controller =
+      StreamController<String>.broadcast();
 
-  Stream<FrameDataDto> get stream => _controller.stream;
+  Stream<String> get stream => _controller.stream;
 
   @override
-  void onFrame(FrameDataDto data) {
+  void onFrame(String data) {
     _controller.add(data);
   }
 

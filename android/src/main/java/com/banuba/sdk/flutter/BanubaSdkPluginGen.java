@@ -87,41 +87,32 @@ public class BanubaSdkPluginGen {
 
   /** Generated class from Pigeon that represents data sent in messages. */
   public static final class SizeDto {
-    private @NonNull Long width;
+    private @Nullable Long width;
 
-    public @NonNull Long getWidth() {
+    public @Nullable Long getWidth() {
       return width;
     }
 
-    public void setWidth(@NonNull Long setterArg) {
-      if (setterArg == null) {
-        throw new IllegalStateException("Nonnull field \"width\" is null.");
-      }
+    public void setWidth(@Nullable Long setterArg) {
       this.width = setterArg;
     }
 
-    private @NonNull Long height;
+    private @Nullable Long height;
 
-    public @NonNull Long getHeight() {
+    public @Nullable Long getHeight() {
       return height;
     }
 
-    public void setHeight(@NonNull Long setterArg) {
-      if (setterArg == null) {
-        throw new IllegalStateException("Nonnull field \"height\" is null.");
-      }
+    public void setHeight(@Nullable Long setterArg) {
       this.height = setterArg;
     }
-
-    /** Constructor is non-public to enforce null safety; use Builder. */
-    SizeDto() {}
 
     @Override
     public boolean equals(Object o) {
       if (this == o) { return true; }
       if (o == null || getClass() != o.getClass()) { return false; }
       SizeDto that = (SizeDto) o;
-      return width.equals(that.width) && height.equals(that.height);
+      return Objects.equals(width, that.width) && Objects.equals(height, that.height);
     }
 
     @Override
@@ -134,7 +125,7 @@ public class BanubaSdkPluginGen {
       private @Nullable Long width;
 
       @CanIgnoreReturnValue
-      public @NonNull Builder setWidth(@NonNull Long setterArg) {
+      public @NonNull Builder setWidth(@Nullable Long setterArg) {
         this.width = setterArg;
         return this;
       }
@@ -142,7 +133,7 @@ public class BanubaSdkPluginGen {
       private @Nullable Long height;
 
       @CanIgnoreReturnValue
-      public @NonNull Builder setHeight(@NonNull Long setterArg) {
+      public @NonNull Builder setHeight(@Nullable Long setterArg) {
         this.height = setterArg;
         return this;
       }
@@ -169,63 +160,6 @@ public class BanubaSdkPluginGen {
       pigeonResult.setWidth((Long) width);
       Object height = pigeonVar_list.get(1);
       pigeonResult.setHeight((Long) height);
-      return pigeonResult;
-    }
-  }
-
-  /** Generated class from Pigeon that represents data sent in messages. */
-  public static final class FrameDataDto {
-    private @Nullable String frameDataJson;
-
-    public @Nullable String getFrameDataJson() {
-      return frameDataJson;
-    }
-
-    public void setFrameDataJson(@Nullable String setterArg) {
-      this.frameDataJson = setterArg;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-      if (this == o) { return true; }
-      if (o == null || getClass() != o.getClass()) { return false; }
-      FrameDataDto that = (FrameDataDto) o;
-      return Objects.equals(frameDataJson, that.frameDataJson);
-    }
-
-    @Override
-    public int hashCode() {
-      return Objects.hash(frameDataJson);
-    }
-
-    public static final class Builder {
-
-      private @Nullable String frameDataJson;
-
-      @CanIgnoreReturnValue
-      public @NonNull Builder setFrameDataJson(@Nullable String setterArg) {
-        this.frameDataJson = setterArg;
-        return this;
-      }
-
-      public @NonNull FrameDataDto build() {
-        FrameDataDto pigeonReturn = new FrameDataDto();
-        pigeonReturn.setFrameDataJson(frameDataJson);
-        return pigeonReturn;
-      }
-    }
-
-    @NonNull
-    ArrayList<Object> toList() {
-      ArrayList<Object> toListResult = new ArrayList<>(1);
-      toListResult.add(frameDataJson);
-      return toListResult;
-    }
-
-    static @NonNull FrameDataDto fromList(@NonNull ArrayList<Object> pigeonVar_list) {
-      FrameDataDto pigeonResult = new FrameDataDto();
-      Object frameDataJson = pigeonVar_list.get(0);
-      pigeonResult.setFrameDataJson((String) frameDataJson);
       return pigeonResult;
     }
   }
@@ -302,8 +236,6 @@ public class BanubaSdkPluginGen {
         case (byte) 130:
           return SizeDto.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 131:
-          return FrameDataDto.fromList((ArrayList<Object>) readValue(buffer));
-        case (byte) 132:
           return EffectActivationCompletionDto.fromList((ArrayList<Object>) readValue(buffer));
         default:
           return super.readValueOfType(type, buffer);
@@ -318,11 +250,8 @@ public class BanubaSdkPluginGen {
       } else if (value instanceof SizeDto) {
         stream.write(130);
         writeValue(stream, ((SizeDto) value).toList());
-      } else if (value instanceof FrameDataDto) {
-        stream.write(131);
-        writeValue(stream, ((FrameDataDto) value).toList());
       } else if (value instanceof EffectActivationCompletionDto) {
-        stream.write(132);
+        stream.write(131);
         writeValue(stream, ((EffectActivationCompletionDto) value).toList());
       } else {
         super.writeValue(stream, value);
@@ -1154,7 +1083,7 @@ public class BanubaSdkPluginGen {
     static @NonNull MessageCodec<Object> getCodec() {
       return PigeonCodec.INSTANCE;
     }
-    public void onFrame(@NonNull FrameDataDto dataArg, @NonNull VoidResult result) {
+    public void onFrame(@NonNull String dataArg, @NonNull VoidResult result) {
       final String channelName = "dev.flutter.pigeon.banuba_sdk.FrameDataFlutterApi.onFrame" + messageChannelSuffix;
       BasicMessageChannel<Object> channel =
           new BasicMessageChannel<>(
