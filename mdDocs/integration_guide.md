@@ -15,7 +15,7 @@
 
 ```groovy
     ext {
-        bnb_sdk_version = '1.17.+'
+        bnb_sdk_version = '1.18.+'
     }
 ```
 
@@ -25,7 +25,7 @@
 
 ```
     source 'https://github.com/sdk-banuba/banuba-sdk-podspecs.git'
-    $bnb_sdk_version = '~> 1.17.1'
+    $bnb_sdk_version = '~> 1.18.0'
 ```
 
 2. Add NSCameraUsageDescription in the [Info.plist](../example/ios/Runner/Info.plist):
