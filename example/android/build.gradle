@@ -1,5 +1,5 @@
 ext {
-    bnb_sdk_version = '1.18.+'
+    bnb_sdk_version = '1.18.0-4-g7902b09129-SNAPSHOT'
 }
 
 allprojects {
