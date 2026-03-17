@@ -5,7 +5,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'banuba_sdk'
-  s.version          = '3.0.12'
+  s.version          = '3.1.0'
   s.summary          = 'Banuba SDK for Flutter'
   s.description      = <<-DESC
 Banuba SDK for Flutter

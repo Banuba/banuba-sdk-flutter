@@ -90,3 +90,6 @@
 ## 3.0.12
 * Fix maven dependencies
 * Minor updates
+
+## 3.1.0
+* Update Banuba SDK version

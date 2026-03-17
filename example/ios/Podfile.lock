@@ -1,5 +1,5 @@
 PODS:
-  - banuba_sdk (3.0.12):
+  - banuba_sdk (3.1.0):
     - BNBSdkApi (~> 1.18.0)
     - Flutter
   - BNBBackground (1.18.0):
@@ -55,7 +55,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/permission_handler_apple/ios"
 
 SPEC CHECKSUMS:
-  banuba_sdk: be15a36613594d8ce1e900aeb2b2ad95c1ce0e22
+  banuba_sdk: 002d04b654433bd6503363ec8125c716083b504e
   BNBBackground: 876aafe44c28da5202a8fc6eb222bccd59920b6b
   BNBEffectPlayer: d02533930e139aa7443cc48bf04b4e212f93b767
   BNBFaceTracker: a808fdab4cd9caf650200246195eb74fd0f147d6
