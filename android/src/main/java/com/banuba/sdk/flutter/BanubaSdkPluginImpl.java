@@ -744,10 +744,7 @@ public class BanubaSdkPluginImpl {
             @NonNull
             @Override
             public Size getSize(@NonNull Size size) {
-                if (size.getWidth() > size.getHeight()) {
-                    return new Size(size.getHeight(), size.getWidth());
-                }
-                return new Size(size.getWidth(), size.getHeight());
+                return new Size(1080, 1920);
             }
         }
 
