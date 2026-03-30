@@ -205,7 +205,8 @@ public class BanubaSdkPluginImpl {
                 }
 
                 boolean hasFace = false;
-                String faceAttributes = null;
+                String gender = null;
+                String skinColor = null;
                 Double lightCorrection = null;
                 boolean isEyesOpen = false;
                 String faceShape = null;
@@ -221,8 +222,12 @@ public class BanubaSdkPluginImpl {
 
                 if (hasFace) {
                     try {
-                        faceAttributes = frameData.getFaceAttributes();
-                    } catch (java.lang.Exception e) {}
+                        gender = String.valueOf(frameData.getFrxRecognitionResult().getFaces().get(0).getGender());
+                    } catch (java.lang.Exception e){}
+
+                    try {
+                        skinColor = String.valueOf(frameData.getFaceSkinColor());
+                    } catch (java.lang.Exception e){}
 
                     try {
                         faceRect = frameData.getFrxRecognitionResult().getFaces().get(0).getFaceRect().toString();
@@ -256,8 +261,11 @@ public class BanubaSdkPluginImpl {
                     if (faceRect != null) {
                         jsonObject.put("faceRect", faceRect);
                     }
-                    if (faceAttributes != null) {
-                        jsonObject.put("faceAttributesJson", faceAttributes);
+                    if (gender != null) {
+                        jsonObject.put("gender", gender);
+                    }
+                    if (skinColor != null) {
+                        jsonObject.put("skinColor", skinColor);
                     }
                     if (lightCorrection != null) {
                         jsonObject.put("lightCorrection", lightCorrection);
