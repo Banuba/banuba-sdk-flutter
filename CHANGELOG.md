@@ -93,3 +93,6 @@
 
 ## 3.1.0
 * Update Banuba SDK version
+
+## 3.1.1
+* Dependencies were updated
