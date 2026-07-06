@@ -494,7 +494,7 @@ public class BanubaSdkPluginImpl {
                     }
 
                     final FileOutputStream fos = new FileOutputStream(file);
-                    bitmap.compress(Bitmap.CompressFormat.PNG, quality, fos);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, quality, fos);
                     fos.close();
 
                     // Flutter handles thread dispatching
