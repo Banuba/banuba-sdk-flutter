@@ -96,3 +96,7 @@
 
 ## 3.1.1
 * Dependencies were updated
+
+## 3.1.2
+* Remove `ActivityAware` usage from Android plugin
+* Check only `CAMERA` permission in Android plugin

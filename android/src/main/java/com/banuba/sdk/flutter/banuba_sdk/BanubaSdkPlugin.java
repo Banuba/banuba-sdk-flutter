@@ -8,15 +8,12 @@ import androidx.annotation.NonNull;
 import com.banuba.sdk.flutter.EffectPlayerView.NativeViewFactory;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
-import io.flutter.embedding.engine.plugins.activity.ActivityAware;
-import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
 
 /**
  * BanubaSdkPlugin
  */
-public class BanubaSdkPlugin implements FlutterPlugin, ActivityAware {
+public class BanubaSdkPlugin implements FlutterPlugin {
     private BanubaSdkManagerIml mManagerImpl;
-    private ActivityPluginBinding mActivityBinding;
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
@@ -32,27 +29,5 @@ public class BanubaSdkPlugin implements FlutterPlugin, ActivityAware {
     @Override
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
         BanubaSdkManager.setUp(binding.getBinaryMessenger(), null);
-    }
-
-    @Override
-    public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
-        mManagerImpl.setActivity(binding.getActivity());
-        mActivityBinding = binding;
-    }
-
-    @Override
-    public void onDetachedFromActivity() {
-        mManagerImpl.setActivity(null);
-        mActivityBinding = null;
-    }
-
-    @Override
-    public void onDetachedFromActivityForConfigChanges() {
-        onDetachedFromActivity();
-    }
-
-    @Override
-    public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
-        onAttachedToActivity(binding);
     }
 }

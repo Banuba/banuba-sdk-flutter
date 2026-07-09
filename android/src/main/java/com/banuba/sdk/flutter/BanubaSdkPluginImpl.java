@@ -2,7 +2,6 @@ package com.banuba.sdk.flutter;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -28,7 +27,6 @@ import com.banuba.sdk.types.PixelFormat;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -41,12 +39,6 @@ public class BanubaSdkPluginImpl {
     private static final String TAG = "BanubaSdkPlugin";
 
     public static class BanubaSdkManagerIml implements BanubaSdkPluginGen.BanubaSdkManager {
-        private static final String[] PERMISSIONS = new String[]{
-                Manifest.permission.CAMERA,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.RECORD_AUDIO
-        };
-
         private final Context mContext;
         private BanubaSdkManager mSdkManager;
 
@@ -166,9 +158,6 @@ public class BanubaSdkPluginImpl {
             mContext = context;
         }
 
-        public void setActivity(Activity activity) {
-        }
-
         @Override
         public void initialize(
                 @NonNull List<String> resourcePath,
@@ -179,7 +168,7 @@ public class BanubaSdkPluginImpl {
             BanubaSdkManager.initialize(
                     mContext.getApplicationContext(),
                     clientTokenString,
-                    resourcePath.toArray(new String[]{})
+                    resourcePath.toArray(new String[0])
             );
         }
 
@@ -222,8 +211,8 @@ public class BanubaSdkPluginImpl {
             if (allPermissionsGranted()) {
                 getSdkManager().openCamera();
             } else {
-                Log.w(TAG, "Cannot open camera. Required permissions not granted: "
-                        + Arrays.toString(PERMISSIONS));
+                Log.w(TAG, "Cannot open camera. Required permission not granted: "
+                        + Manifest.permission.CAMERA);
             }
         }
 
@@ -523,13 +512,8 @@ public class BanubaSdkPluginImpl {
 
         private boolean allPermissionsGranted() {
             if (Build.VERSION.SDK_INT >= 23) {
-                for (String p : PERMISSIONS) {
-                    if (mContext.checkSelfPermission(p) != PackageManager.PERMISSION_GRANTED
-                            && !Manifest.permission.WRITE_EXTERNAL_STORAGE.equals(p)) {
-                        return false;
-                    }
-                }
-                return true;
+                return mContext.checkSelfPermission(Manifest.permission.CAMERA)
+                        == PackageManager.PERMISSION_GRANTED;
             } else {
                 return true;
             }
