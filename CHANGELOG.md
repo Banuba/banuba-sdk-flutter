@@ -103,3 +103,6 @@
 
 ## 3.1.3
 * Remove `RECORD_AUDIO` permission from Android plugin manifest
+
+## 3.1.4
+* Fix iOS podspec version and example lockfile release metadata
