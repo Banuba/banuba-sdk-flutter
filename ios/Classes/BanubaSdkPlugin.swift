@@ -141,7 +141,7 @@ protocol BanubaSdkManager {
   func unloadEffect() throws
   /// Used for passing specific expressions to interact with an effect.
   func evalJs(script: String) throws
-  /// Used for passing specific expressions to interact with an effect. 
+  /// Used for passing specific expressions to interact with an effect.
   /// @see https://docs.banuba.com/far-sdk/effects/prefabs/overview
   func reloadConfig(script: String) throws
   /// Sets camera zoom level
@@ -149,15 +149,18 @@ protocol BanubaSdkManager {
   /// Enables flashlight. Available only for back camera facing.
   func enableFlashlight(enabled: Bool) throws
   /// Start video recording
-  /// @param frontCameraMirror is optional, applies for iOS only. 
-  func startVideoRecording(filePath: String, captureAudio: Bool, width: Int64, height: Int64, frontCameraMirror: Bool) throws
+  /// @param frontCameraMirror is optional, applies for iOS only.
+  /// @param adjustDeviceOrientation is optional. When true, the video
+  /// orientation follows the device orientation at the start of recording;
+  /// otherwise, width and height are used without orientation adjustment.
+  func startVideoRecording(filePath: String, captureAudio: Bool, width: Int64, height: Int64, frontCameraMirror: Bool, adjustDeviceOrientation: Bool) throws
   /// Stops video recording
   func stopVideoRecording(completion: @escaping (Result<Void, Error>) -> Void)
   /// Pause screen recording.
   /// @see resumeVideoRecoding, startVideoRecording
   func pauseVideoRecording() throws
   /// Resume screen recording after it was paused.
-  /// @see pauseVideoRecording, startVideoRecording 
+  /// @see pauseVideoRecording, startVideoRecording
   func resumeVideoRecording() throws
   /// Takes photo from camera
   func takePhoto(filePath: String, width: Int64, height: Int64, completion: @escaping (Result<Void, Error>) -> Void)
@@ -335,7 +338,7 @@ class BanubaSdkManagerSetup {
     } else {
       evalJsChannel.setMessageHandler(nil)
     }
-    /// Used for passing specific expressions to interact with an effect. 
+    /// Used for passing specific expressions to interact with an effect.
     /// @see https://docs.banuba.com/far-sdk/effects/prefabs/overview
     let reloadConfigChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.reloadConfig\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
@@ -385,7 +388,10 @@ class BanubaSdkManagerSetup {
       enableFlashlightChannel.setMessageHandler(nil)
     }
     /// Start video recording
-    /// @param frontCameraMirror is optional, applies for iOS only. 
+    /// @param frontCameraMirror is optional, applies for iOS only.
+    /// @param adjustDeviceOrientation is optional. When true, the video
+    /// orientation follows the device orientation at the start of recording;
+    /// otherwise, width and height are used without orientation adjustment.
     let startVideoRecordingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.startVideoRecording\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       startVideoRecordingChannel.setMessageHandler { message, reply in
@@ -395,8 +401,9 @@ class BanubaSdkManagerSetup {
         let widthArg = args[2] as! Int64
         let heightArg = args[3] as! Int64
         let frontCameraMirrorArg = args[4] as! Bool
+        let adjustDeviceOrientationArg = args[5] as! Bool
         do {
-          try api.startVideoRecording(filePath: filePathArg, captureAudio: captureAudioArg, width: widthArg, height: heightArg, frontCameraMirror: frontCameraMirrorArg)
+          try api.startVideoRecording(filePath: filePathArg, captureAudio: captureAudioArg, width: widthArg, height: heightArg, frontCameraMirror: frontCameraMirrorArg, adjustDeviceOrientation: adjustDeviceOrientationArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
@@ -437,7 +444,7 @@ class BanubaSdkManagerSetup {
       pauseVideoRecordingChannel.setMessageHandler(nil)
     }
     /// Resume screen recording after it was paused.
-    /// @see pauseVideoRecording, startVideoRecording 
+    /// @see pauseVideoRecording, startVideoRecording
     let resumeVideoRecordingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.resumeVideoRecording\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       resumeVideoRecordingChannel.setMessageHandler { _, reply in

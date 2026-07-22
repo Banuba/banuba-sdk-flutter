@@ -106,3 +106,6 @@
 
 ## 3.1.4
 * Fix iOS podspec version and example lockfile release metadata
+
+## 3.1.5
+* Add device-orientation-aware video recording on iOS and Android

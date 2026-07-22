@@ -158,8 +158,17 @@
 
 ```dart
     void startVideoRecording(
-        String filePath, bool captureAudio, int width, int height);
+        String filePath, bool captureAudio, int width, int height,
+        [bool frontCameraMirror = true,
+        bool adjustDeviceOrientation = false]);
 ```
+
+Set `adjustDeviceOrientation` to `true` to store the video in the device
+orientation detected when recording starts. The requested dimensions are
+normalized so the short side is used as the width in portrait and the long
+side is used as the width in landscape. The default `false` uses `width` and
+`height` without orientation adjustment. `frontCameraMirror` applies only to
+iOS.
 
 * Stops video recording:
 

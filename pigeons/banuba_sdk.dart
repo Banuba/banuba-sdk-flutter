@@ -46,7 +46,7 @@ abstract class BanubaSdkManager {
   /// Used for passing specific expressions to interact with an effect.
   void evalJs(String script);
 
-  /// Used for passing specific expressions to interact with an effect. 
+  /// Used for passing specific expressions to interact with an effect.
   /// @see https://docs.banuba.com/far-sdk/effects/prefabs/overview
   void reloadConfig(String script);
 
@@ -57,9 +57,13 @@ abstract class BanubaSdkManager {
   void enableFlashlight(bool enabled);
 
   /// Start video recording
-  /// @param frontCameraMirror is optional, applies for iOS only. 
+  /// @param frontCameraMirror is optional, applies for iOS only.
+  /// @param adjustDeviceOrientation is optional. When true, the video
+  /// orientation follows the device orientation at the start of recording;
+  /// otherwise, width and height are used without orientation adjustment.
   void startVideoRecording(
-      String filePath, bool captureAudio, int width, int height, [bool frontCameraMirror = true]);
+      String filePath, bool captureAudio, int width, int height,
+      [bool frontCameraMirror = true, bool adjustDeviceOrientation = false]);
 
   /// Stops video recording
   @async
@@ -70,7 +74,7 @@ abstract class BanubaSdkManager {
   void pauseVideoRecording();
 
   /// Resume screen recording after it was paused.
-  /// @see pauseVideoRecording, startVideoRecording 
+  /// @see pauseVideoRecording, startVideoRecording
   void resumeVideoRecording();
 
   /// Takes photo from camera

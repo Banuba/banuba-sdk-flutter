@@ -4,12 +4,15 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.util.Log;
 import android.util.Size;
+import android.view.Surface;
 import android.view.SurfaceView;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 
@@ -267,16 +270,51 @@ public class BanubaSdkPluginImpl {
             @NonNull Boolean captureAudio,
             @NonNull Long width,
             @NonNull Long height,
-            @NonNull Boolean frontCameraMirror // ignored for Android
+            @NonNull Boolean frontCameraMirror, // ignored for Android
+            @NonNull Boolean adjustDeviceOrientation
         ) {
+            final ContentRatioParams contentRatioParams = makeVideoContentRatioParams(
+                    width.intValue(), height.intValue(), adjustDeviceOrientation);
             Log.d(TAG, "startVideoRecording = " + filePath + "; audio = " + captureAudio
-                    + ", w = " + width + "; h = " + height);
+                    + ", w = " + contentRatioParams.getWidth()
+                    + "; h = " + contentRatioParams.getHeight()
+                    + "; adjust orientation = " + adjustDeviceOrientation);
             getSdkManager().startVideoRecording(
                     filePath,
                     captureAudio,
-                    new ContentRatioParams(width.intValue(), height.intValue(), false),
+                    contentRatioParams,
                     1f
             );
+        }
+
+        @NonNull
+        private ContentRatioParams makeVideoContentRatioParams(
+                int width,
+                int height,
+                boolean adjustDeviceOrientation
+        ) {
+            if (!adjustDeviceOrientation) {
+                return new ContentRatioParams(width, height, false);
+            }
+
+            final int shortSide = Math.min(width, height);
+            final int longSide = Math.max(width, height);
+            return isLandscapeDeviceOrientation()
+                    ? new ContentRatioParams(longSide, shortSide, false)
+                    : new ContentRatioParams(shortSide, longSide, false);
+        }
+
+        @SuppressWarnings("deprecation")
+        private boolean isLandscapeDeviceOrientation() {
+            final WindowManager windowManager =
+                    (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+            if (windowManager != null) {
+                final int rotation = windowManager.getDefaultDisplay().getRotation();
+                return rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270;
+            }
+
+            return mContext.getResources().getConfiguration().orientation
+                    == Configuration.ORIENTATION_LANDSCAPE;
         }
 
         @Override

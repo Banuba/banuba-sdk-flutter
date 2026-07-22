@@ -299,7 +299,7 @@ class BanubaSdkManager {
     }
   }
 
-  /// Used for passing specific expressions to interact with an effect. 
+  /// Used for passing specific expressions to interact with an effect.
   /// @see https://docs.banuba.com/far-sdk/effects/prefabs/overview
   Future<void> reloadConfig(String script) async {
     final String pigeonVar_channelName = 'dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.reloadConfig$pigeonVar_messageChannelSuffix';
@@ -370,8 +370,11 @@ class BanubaSdkManager {
   }
 
   /// Start video recording
-  /// @param frontCameraMirror is optional, applies for iOS only. 
-  Future<void> startVideoRecording(String filePath, bool captureAudio, int width, int height, [bool frontCameraMirror = true,]) async {
+  /// @param frontCameraMirror is optional, applies for iOS only.
+  /// @param adjustDeviceOrientation is optional. When true, the video
+  /// orientation follows the device orientation at the start of recording;
+  /// otherwise, width and height are used without orientation adjustment.
+  Future<void> startVideoRecording(String filePath, bool captureAudio, int width, int height, [bool frontCameraMirror = true, bool adjustDeviceOrientation = false,]) async {
     final String pigeonVar_channelName = 'dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.startVideoRecording$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -379,7 +382,7 @@ class BanubaSdkManager {
       binaryMessenger: pigeonVar_binaryMessenger,
     );
     final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(<Object?>[filePath, captureAudio, width, height, frontCameraMirror]) as List<Object?>?;
+        await pigeonVar_channel.send(<Object?>[filePath, captureAudio, width, height, frontCameraMirror, adjustDeviceOrientation]) as List<Object?>?;
     if (pigeonVar_replyList == null) {
       throw _createConnectionError(pigeonVar_channelName);
     } else if (pigeonVar_replyList.length > 1) {
@@ -441,7 +444,7 @@ class BanubaSdkManager {
   }
 
   /// Resume screen recording after it was paused.
-  /// @see pauseVideoRecording, startVideoRecording 
+  /// @see pauseVideoRecording, startVideoRecording
   Future<void> resumeVideoRecording() async {
     final String pigeonVar_channelName = 'dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.resumeVideoRecording$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(

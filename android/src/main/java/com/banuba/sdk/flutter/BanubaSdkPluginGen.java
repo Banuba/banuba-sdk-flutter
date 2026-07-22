@@ -158,7 +158,7 @@ public class BanubaSdkPluginGen {
     /** Used for passing specific expressions to interact with an effect. */
     void evalJs(@NonNull String script);
     /**
-     * Used for passing specific expressions to interact with an effect. 
+     * Used for passing specific expressions to interact with an effect.
      * @see https://docs.banuba.com/far-sdk/effects/prefabs/overview
      */
     void reloadConfig(@NonNull String script);
@@ -168,9 +168,12 @@ public class BanubaSdkPluginGen {
     void enableFlashlight(@NonNull Boolean enabled);
     /**
      * Start video recording
-     * @param frontCameraMirror is optional, applies for iOS only. 
+     * @param frontCameraMirror is optional, applies for iOS only.
+     * @param adjustDeviceOrientation is optional. When true, the video
+     * orientation follows the device orientation at the start of recording;
+     * otherwise, width and height are used without orientation adjustment.
      */
-    void startVideoRecording(@NonNull String filePath, @NonNull Boolean captureAudio, @NonNull Long width, @NonNull Long height, @NonNull Boolean frontCameraMirror);
+    void startVideoRecording(@NonNull String filePath, @NonNull Boolean captureAudio, @NonNull Long width, @NonNull Long height, @NonNull Boolean frontCameraMirror, @NonNull Boolean adjustDeviceOrientation);
     /** Stops video recording */
     void stopVideoRecording(@NonNull VoidResult result);
     /**
@@ -180,7 +183,7 @@ public class BanubaSdkPluginGen {
     void pauseVideoRecording();
     /**
      * Resume screen recording after it was paused.
-     * @see pauseVideoRecording, startVideoRecording 
+     * @see pauseVideoRecording, startVideoRecording
      */
     void resumeVideoRecording();
     /** Takes photo from camera */
@@ -510,8 +513,9 @@ public class BanubaSdkPluginGen {
                 Long widthArg = (Long) args.get(2);
                 Long heightArg = (Long) args.get(3);
                 Boolean frontCameraMirrorArg = (Boolean) args.get(4);
+                Boolean adjustDeviceOrientationArg = (Boolean) args.get(5);
                 try {
-                  api.startVideoRecording(filePathArg, captureAudioArg, widthArg, heightArg, frontCameraMirrorArg);
+                  api.startVideoRecording(filePathArg, captureAudioArg, widthArg, heightArg, frontCameraMirrorArg, adjustDeviceOrientationArg);
                   wrapped.add(0, null);
                 }
  catch (Throwable exception) {
