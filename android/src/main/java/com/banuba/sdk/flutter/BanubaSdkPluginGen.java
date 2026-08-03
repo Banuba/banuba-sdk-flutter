@@ -306,7 +306,7 @@ public class BanubaSdkPluginGen {
     /** Opens Camera */
     void openCamera();
     /** Closes Camera */
-    void closeCamera();
+    void closeCamera(@NonNull VoidResult result);
     /** Starts render processing. Next, use loadEffect for applying effects */
     void startPlayer();
     /** Stops render processing. Effects will not be applied. */
@@ -474,14 +474,20 @@ public class BanubaSdkPluginGen {
           channel.setMessageHandler(
               (message, reply) -> {
                 ArrayList<Object> wrapped = new ArrayList<>();
-                try {
-                  api.closeCamera();
-                  wrapped.add(0, null);
-                }
- catch (Throwable exception) {
-                  wrapped = wrapError(exception);
-                }
-                reply.reply(wrapped);
+                VoidResult resultCallback =
+                    new VoidResult() {
+                      public void success() {
+                        wrapped.add(0, null);
+                        reply.reply(wrapped);
+                      }
+
+                      public void error(Throwable error) {
+                        ArrayList<Object> wrappedError = wrapError(error);
+                        reply.reply(wrappedError);
+                      }
+                    };
+
+                api.closeCamera(resultCallback);
               });
         } else {
           channel.setMessageHandler(null);

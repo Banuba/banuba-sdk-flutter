@@ -7,6 +7,9 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraCharacteristics;
+import android.hardware.camera2.CameraManager;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -63,6 +66,9 @@ public class BanubaSdkPluginImpl {
         private BanubaSdkPluginGen.VoidResult mTakePhotoCallback;
         private BanubaSdkPluginGen.VoidResult mVideoRecordingCallback;
         private BanubaSdkPluginGen.VoidResult mEditedImageCallback;
+        private BanubaSdkPluginGen.VoidResult mCloseCameraCallback;
+        private CameraManager.AvailabilityCallback mCameraAvailabilityCallback;
+        private int mCameraFacing = CameraCharacteristics.LENS_FACING_FRONT;
 
         private File mPhotoFile;
 
@@ -367,9 +373,59 @@ public class BanubaSdkPluginImpl {
         }
 
         @Override
-        public void closeCamera() {
+        public void closeCamera(@NonNull BanubaSdkPluginGen.VoidResult result) {
             Log.d(TAG, "closeCamera");
-            getSdkManager().closeCamera();
+            try {
+                CameraManager cameraManager = (CameraManager) mContext.getSystemService(Context.CAMERA_SERVICE);
+                String activeCameraId = getCameraId(cameraManager);
+                mCloseCameraCallback = result;
+                mCameraAvailabilityCallback = new CameraManager.AvailabilityCallback() {
+                    @Override
+                    public void onCameraAvailable(@NonNull String cameraId) {
+                        if (activeCameraId.equals(cameraId)) {
+                            completeCloseCamera();
+                        }
+                    }
+                };
+                cameraManager.registerAvailabilityCallback(mCameraAvailabilityCallback, mMainHandler);
+                getSdkManager().closeCamera();
+            } catch (Exception error) {
+                unregisterCameraAvailabilityCallback();
+                mCloseCameraCallback = null;
+                result.error(error);
+            }
+        }
+
+        private String getCameraId(CameraManager cameraManager) throws CameraAccessException {
+            for (String cameraId : cameraManager.getCameraIdList()) {
+                Integer facing = cameraManager.getCameraCharacteristics(cameraId)
+                        .get(CameraCharacteristics.LENS_FACING);
+                if (Integer.valueOf(mCameraFacing).equals(facing)) {
+                    return cameraId;
+                }
+            }
+            throw new IllegalStateException("Active camera not found");
+        }
+
+        private void completeCloseCamera() {
+            BanubaSdkPluginGen.VoidResult result = mCloseCameraCallback;
+            if (result == null) {
+                return;
+            }
+
+            unregisterCameraAvailabilityCallback();
+            mCloseCameraCallback = null;
+            result.success();
+        }
+
+        private void unregisterCameraAvailabilityCallback() {
+            if (mCameraAvailabilityCallback == null) {
+                return;
+            }
+
+            CameraManager cameraManager = (CameraManager) mContext.getSystemService(Context.CAMERA_SERVICE);
+            cameraManager.unregisterAvailabilityCallback(mCameraAvailabilityCallback);
+            mCameraAvailabilityCallback = null;
         }
 
         @Override
@@ -523,6 +579,9 @@ public class BanubaSdkPluginImpl {
         @Override
         public void setCameraFacing(Boolean front) {
             Log.d(TAG, "setCameraFacing front = " + front);
+            mCameraFacing = front
+                    ? CameraCharacteristics.LENS_FACING_FRONT
+                    : CameraCharacteristics.LENS_FACING_BACK;
             if (front) {
                 getSdkManager().setCameraFacing(Facing.FRONT, true);
             } else {

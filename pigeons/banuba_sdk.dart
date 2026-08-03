@@ -34,6 +34,7 @@ abstract class BanubaSdkManager {
   void openCamera();
 
   /// Closes Camera
+  @async
   void closeCamera();
 
   /// Starts render processing. Next, use loadEffect for applying effects
