@@ -66,6 +66,7 @@ public class BanubaSdkPluginImpl {
         private BanubaSdkPluginGen.VoidResult mTakePhotoCallback;
         private BanubaSdkPluginGen.VoidResult mVideoRecordingCallback;
         private BanubaSdkPluginGen.VoidResult mEditedImageCallback;
+        private BanubaSdkPluginGen.VoidResult mOpenCameraCallback;
         private BanubaSdkPluginGen.VoidResult mCloseCameraCallback;
         private CameraManager.AvailabilityCallback mCameraAvailabilityCallback;
         private int mCameraFacing = CameraCharacteristics.LENS_FACING_FRONT;
@@ -80,6 +81,12 @@ public class BanubaSdkPluginImpl {
             @Override
             public void onCameraOpenError(@NonNull Throwable throwable) {
                 Log.w(TAG, "onCameraOpenError", throwable);
+                BanubaSdkPluginGen.VoidResult result = mOpenCameraCallback;
+                if (result != null) {
+                    unregisterCameraAvailabilityCallback();
+                    mOpenCameraCallback = null;
+                    result.error(throwable);
+                }
             }
 
             @Override
@@ -362,13 +369,34 @@ public class BanubaSdkPluginImpl {
         }
 
         @Override
-        public void openCamera() {
+        public void openCamera(@NonNull BanubaSdkPluginGen.VoidResult result) {
             Log.d(TAG, "openCamera");
-            if (allPermissionsGranted()) {
+            if (!allPermissionsGranted()) {
+                String message = "Cannot open camera. Required permissions not granted: "
+                        + Arrays.toString(PERMISSIONS);
+                Log.w(TAG, message);
+                result.error(new IllegalStateException(message));
+                return;
+            }
+
+            try {
+                CameraManager cameraManager = (CameraManager) mContext.getSystemService(Context.CAMERA_SERVICE);
+                String activeCameraId = getCameraId(cameraManager);
+                mOpenCameraCallback = result;
+                mCameraAvailabilityCallback = new CameraManager.AvailabilityCallback() {
+                    @Override
+                    public void onCameraUnavailable(@NonNull String cameraId) {
+                        if (activeCameraId.equals(cameraId)) {
+                            completeOpenCamera();
+                        }
+                    }
+                };
+                cameraManager.registerAvailabilityCallback(mCameraAvailabilityCallback, mMainHandler);
                 getSdkManager().openCamera();
-            } else {
-                Log.w(TAG, "Cannot open camera. Required permissions not granted: "
-                        + Arrays.toString(PERMISSIONS));
+            } catch (Exception error) {
+                unregisterCameraAvailabilityCallback();
+                mOpenCameraCallback = null;
+                result.error(error);
             }
         }
 
@@ -405,6 +433,17 @@ public class BanubaSdkPluginImpl {
                 }
             }
             throw new IllegalStateException("Active camera not found");
+        }
+
+        private void completeOpenCamera() {
+            BanubaSdkPluginGen.VoidResult result = mOpenCameraCallback;
+            if (result == null) {
+                return;
+            }
+
+            unregisterCameraAvailabilityCallback();
+            mOpenCameraCallback = null;
+            result.success();
         }
 
         private void completeCloseCamera() {

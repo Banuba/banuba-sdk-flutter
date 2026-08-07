@@ -31,6 +31,7 @@ abstract class BanubaSdkManager {
   void attachWidget(int banubaId);
 
   /// Opens Camera
+  @async
   void openCamera();
 
   /// Closes Camera
