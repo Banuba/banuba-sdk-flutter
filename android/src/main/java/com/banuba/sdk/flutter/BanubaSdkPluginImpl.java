@@ -647,6 +647,97 @@ public class BanubaSdkPluginImpl {
             });
         }
 
+        @Override
+        public void processImages(
+                @NonNull String sourceFilePath,
+                @NonNull List<BanubaSdkPluginGen.ImageBatchItem> items,
+                @NonNull Long quality,
+                @NonNull BanubaSdkPluginGen.VoidResult result
+        ) {
+            mThreadPool.submit(() -> {
+                final long batchStartedAt = System.currentTimeMillis();
+                final Bitmap source = BitmapFactory.decodeFile(sourceFilePath);
+                if (source == null) {
+                    result.error(new IllegalArgumentException("Cannot decode source image"));
+                    return;
+                }
+
+                final FullImageData image = new FullImageData(source,
+                        new FullImageData.Orientation(CameraOrientation.DEG_0));
+                final RunnableFuture<Void> future = new FutureTask<>(() -> {
+                    final CameraOrientation orientation = image.getOrientation().getCameraOrientation();
+                    final Size size = image.getSize();
+                    final int width = orientation == CameraOrientation.DEG_90
+                            || orientation == CameraOrientation.DEG_270
+                            ? size.getHeight() : size.getWidth();
+                    final int height = orientation == CameraOrientation.DEG_90
+                            || orientation == CameraOrientation.DEG_270
+                            ? size.getWidth() : size.getHeight();
+
+                    getSdkManager().getEffectPlayer().startVideoProcessing(
+                            width, height, orientation, false, true
+                    );
+                    try {
+                        final long recognitionStartedAt = System.currentTimeMillis();
+                        final FrameData processedFrame = getSdkManager().getEffectPlayer()
+                                .processVideoFrame(image, 10);
+                        Log.d(TAG, "Batch recognition = "
+                                + (System.currentTimeMillis() - recognitionStartedAt) + " ms");
+                        final Effect effect = getSdkManager().getEffectManager().current();
+                        if (effect == null) {
+                            throw new IllegalStateException("Effect is not loaded");
+                        }
+
+                        for (int i = 0; i < items.size(); i++) {
+                            final long itemStartedAt = System.currentTimeMillis();
+                            final BanubaSdkPluginGen.ImageBatchItem item = items.get(i);
+                            for (String script : item.getEffectScripts()) {
+                                effect.evalJs(script, null);
+                            }
+
+                            try (Data rendered = getSdkManager().getEffectPlayer().drawVideoFrame(
+                                    processedFrame, 0, PixelFormat.RGBA
+                            )) {
+                                final Bitmap bitmap = Bitmap.createBitmap(
+                                    width, height, Bitmap.Config.ARGB_8888
+                                );
+                                try {
+                                    bitmap.copyPixelsFromBuffer(rendered.getData());
+                                    final File file = new File(item.getDestinationPath());
+                                    if (!file.exists()) {
+                                        file.createNewFile();
+                                    }
+                                    try (FileOutputStream output = new FileOutputStream(file)) {
+                                        bitmap.compress(Bitmap.CompressFormat.JPEG, quality.intValue(), output);
+                                    }
+                                } finally {
+                                    bitmap.recycle();
+                                }
+                            }
+                            Log.d(TAG, "Batch image " + i + " = "
+                                    + (System.currentTimeMillis() - itemStartedAt) + " ms");
+                        }
+                    } finally {
+                        getSdkManager().getEffectPlayer().stopVideoProcessing(false);
+                    }
+                    return null;
+                });
+
+                getSdkManager().runOnRenderThread(future);
+                try {
+                    future.get(60, TimeUnit.SECONDS);
+                    Log.d(TAG, "Time to process batch = "
+                            + (System.currentTimeMillis() - batchStartedAt) + " ms");
+                    result.success();
+                } catch (Exception error) {
+                    Log.w(TAG, "Cannot process image batch", error);
+                    result.error(error);
+                } finally {
+                    source.recycle();
+                }
+            });
+        }
+
         private void processImageInternal(
             @NonNull String sourceFilePath,
             @NonNull String destFilePath,

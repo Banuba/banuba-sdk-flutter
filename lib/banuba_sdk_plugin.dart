@@ -58,6 +58,32 @@ class SizeDto {
   }
 }
 
+class ImageBatchItem {
+  ImageBatchItem({
+    required this.destinationPath,
+    required this.effectScripts,
+  });
+
+  String destinationPath;
+
+  List<String> effectScripts;
+
+  Object encode() {
+    return <Object?>[
+      destinationPath,
+      effectScripts,
+    ];
+  }
+
+  static ImageBatchItem decode(Object result) {
+    result as List<Object?>;
+    return ImageBatchItem(
+      destinationPath: result[0]! as String,
+      effectScripts: (result[1] as List<Object?>?)!.cast<String>(),
+    );
+  }
+}
+
 class EffectActivationCompletionDto {
   EffectActivationCompletionDto({
     this.effectUrl,
@@ -93,8 +119,11 @@ class _PigeonCodec extends StandardMessageCodec {
     }    else if (value is SizeDto) {
       buffer.putUint8(130);
       writeValue(buffer, value.encode());
-    }    else if (value is EffectActivationCompletionDto) {
+    }    else if (value is ImageBatchItem) {
       buffer.putUint8(131);
+      writeValue(buffer, value.encode());
+    }    else if (value is EffectActivationCompletionDto) {
+      buffer.putUint8(132);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -110,6 +139,8 @@ class _PigeonCodec extends StandardMessageCodec {
       case 130: 
         return SizeDto.decode(readValue(buffer)!);
       case 131: 
+        return ImageBatchItem.decode(readValue(buffer)!);
+      case 132: 
         return EffectActivationCompletionDto.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -587,6 +618,29 @@ class BanubaSdkManager {
     );
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_channel.send(<Object?>[sourceFilePath, destFilePath, quality]) as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  /// Processes one image into multiple effect variants.
+  Future<void> processImages(String sourceFilePath, List<ImageBatchItem> items, int quality) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.processImages$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_channel.send(<Object?>[sourceFilePath, items, quality]) as List<Object?>?;
     if (pigeonVar_replyList == null) {
       throw _createConnectionError(pigeonVar_channelName);
     } else if (pigeonVar_replyList.length > 1) {

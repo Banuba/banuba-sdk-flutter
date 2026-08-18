@@ -165,6 +165,94 @@ public class BanubaSdkPluginGen {
   }
 
   /** Generated class from Pigeon that represents data sent in messages. */
+  public static final class ImageBatchItem {
+    private @NonNull String destinationPath;
+
+    public @NonNull String getDestinationPath() {
+      return destinationPath;
+    }
+
+    public void setDestinationPath(@NonNull String setterArg) {
+      if (setterArg == null) {
+        throw new IllegalStateException("Nonnull field \"destinationPath\" is null.");
+      }
+      this.destinationPath = setterArg;
+    }
+
+    private @NonNull List<String> effectScripts;
+
+    public @NonNull List<String> getEffectScripts() {
+      return effectScripts;
+    }
+
+    public void setEffectScripts(@NonNull List<String> setterArg) {
+      if (setterArg == null) {
+        throw new IllegalStateException("Nonnull field \"effectScripts\" is null.");
+      }
+      this.effectScripts = setterArg;
+    }
+
+    /** Constructor is non-public to enforce null safety; use Builder. */
+    ImageBatchItem() {}
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) { return true; }
+      if (o == null || getClass() != o.getClass()) { return false; }
+      ImageBatchItem that = (ImageBatchItem) o;
+      return destinationPath.equals(that.destinationPath) && effectScripts.equals(that.effectScripts);
+    }
+
+    @Override
+    public int hashCode() {
+      return Objects.hash(destinationPath, effectScripts);
+    }
+
+    public static final class Builder {
+
+      private @Nullable String destinationPath;
+
+      @CanIgnoreReturnValue
+      public @NonNull Builder setDestinationPath(@NonNull String setterArg) {
+        this.destinationPath = setterArg;
+        return this;
+      }
+
+      private @Nullable List<String> effectScripts;
+
+      @CanIgnoreReturnValue
+      public @NonNull Builder setEffectScripts(@NonNull List<String> setterArg) {
+        this.effectScripts = setterArg;
+        return this;
+      }
+
+      public @NonNull ImageBatchItem build() {
+        ImageBatchItem pigeonReturn = new ImageBatchItem();
+        pigeonReturn.setDestinationPath(destinationPath);
+        pigeonReturn.setEffectScripts(effectScripts);
+        return pigeonReturn;
+      }
+    }
+
+    @NonNull
+    ArrayList<Object> toList() {
+      ArrayList<Object> toListResult = new ArrayList<>(2);
+      toListResult.add(destinationPath);
+      toListResult.add(effectScripts);
+      return toListResult;
+    }
+
+    static @NonNull ImageBatchItem fromList(@NonNull ArrayList<Object> pigeonVar_list) {
+      ImageBatchItem pigeonResult = new ImageBatchItem();
+      Object destinationPath = pigeonVar_list.get(0);
+      pigeonResult.setDestinationPath((String) destinationPath);
+      Object effectScripts = pigeonVar_list.get(1);
+      pigeonResult.setEffectScripts((List<String>) effectScripts);
+      return pigeonResult;
+    }
+  }
+
+  /** Generated class from Pigeon that represents data sent in messages. */
   public static final class EffectActivationCompletionDto {
     private @Nullable String effectUrl;
 
@@ -236,6 +324,8 @@ public class BanubaSdkPluginGen {
         case (byte) 130:
           return SizeDto.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 131:
+          return ImageBatchItem.fromList((ArrayList<Object>) readValue(buffer));
+        case (byte) 132:
           return EffectActivationCompletionDto.fromList((ArrayList<Object>) readValue(buffer));
         default:
           return super.readValueOfType(type, buffer);
@@ -250,8 +340,11 @@ public class BanubaSdkPluginGen {
       } else if (value instanceof SizeDto) {
         stream.write(130);
         writeValue(stream, ((SizeDto) value).toList());
-      } else if (value instanceof EffectActivationCompletionDto) {
+      } else if (value instanceof ImageBatchItem) {
         stream.write(131);
+        writeValue(stream, ((ImageBatchItem) value).toList());
+      } else if (value instanceof EffectActivationCompletionDto) {
+        stream.write(132);
         writeValue(stream, ((EffectActivationCompletionDto) value).toList());
       } else {
         super.writeValue(stream, value);
@@ -349,6 +442,8 @@ public class BanubaSdkPluginGen {
     void setCameraFacing(@NonNull Boolean front);
     /** Processes image with applied effect */
     void processImage(@NonNull String sourceFilePath, @NonNull String destFilePath, @NonNull Long quality, @NonNull VoidResult result);
+    /** Processes one image into multiple effect variants. */
+    void processImages(@NonNull String sourceFilePath, @NonNull List<ImageBatchItem> items, @NonNull Long quality, @NonNull VoidResult result);
     /** Starts image editing mode */
     void startEditingImage(@NonNull String sourceImageFilePath, @NonNull VoidResult result);
     /** Ending editing image and save result to destination file */
@@ -854,6 +949,37 @@ public class BanubaSdkPluginGen {
                     };
 
                 api.processImage(sourceFilePathArg, destFilePathArg, qualityArg, resultCallback);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.banuba_sdk.BanubaSdkManager.processImages" + messageChannelSuffix, getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<>();
+                ArrayList<Object> args = (ArrayList<Object>) message;
+                String sourceFilePathArg = (String) args.get(0);
+                List<ImageBatchItem> itemsArg = (List<ImageBatchItem>) args.get(1);
+                Long qualityArg = (Long) args.get(2);
+                VoidResult resultCallback =
+                    new VoidResult() {
+                      public void success() {
+                        wrapped.add(0, null);
+                        reply.reply(wrapped);
+                      }
+
+                      public void error(Throwable error) {
+                        ArrayList<Object> wrappedError = wrapError(error);
+                        reply.reply(wrappedError);
+                      }
+                    };
+
+                api.processImages(sourceFilePathArg, itemsArg, qualityArg, resultCallback);
               });
         } else {
           channel.setMessageHandler(null);

@@ -12,6 +12,11 @@ class SizeDto {
   int? height;
 }
 
+class ImageBatchItem {
+  String destinationPath;
+  List<String> effectScripts;
+}
+
 /// An entry point to Banuba SDK
 @HostApi()
 abstract class BanubaSdkManager {
@@ -90,6 +95,10 @@ abstract class BanubaSdkManager {
   /// Processes image with applied effect
   @async
   void processImage(String sourceFilePath, String destFilePath, int quality);
+
+  /// Processes one image into multiple effect variants.
+  @async
+  void processImages(String sourceFilePath, List<ImageBatchItem> items, int quality);
 
   /// Starts image editing mode
   @async
