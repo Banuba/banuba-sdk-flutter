@@ -109,3 +109,6 @@
 
 ## 3.1.5
 * Add device-orientation-aware video recording on iOS and Android
+
+## 3.1.6
+* Update package metadata
