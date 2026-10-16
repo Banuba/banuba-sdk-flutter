@@ -112,3 +112,6 @@
 
 ## 3.1.6
 * Update package metadata
+
+## 3.1.7
+* Update homepage

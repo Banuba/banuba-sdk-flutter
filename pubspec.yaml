@@ -1,7 +1,7 @@
 name: banuba_sdk
 description: Banuba SDK for Flutter - full-scale augmented reality SDK | Flutter face filters | Virtual try-on | Background replacement | Face tracking
-version: 3.1.6
-homepage: https://github.com/Banuba/banuba-sdk-flutter
+version: 3.1.7
+homepage: https://www.banuba.com/facear-sdk/face-filters
 repository: https://github.com/Banuba/banuba-sdk-flutter
 
 topics:
